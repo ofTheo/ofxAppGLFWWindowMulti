@@ -169,14 +169,14 @@ int ofxAppGLFWWindowMulti::addWindow(string windowName, float x, float y, float 
 
 //------------------------------------------------------------
 bool ofxAppGLFWWindowMulti::closeWindow(int windowNo){
-    if(windowNo >= 0 && windowNo < windows.size()){
-    
+    if(windowNo >= 0 && windowNo < windows.size()){    
         if( windows[windowNo]->windowPtr != NULL ){
             glfwDestroyWindow(windows[windowNo]->windowPtr);
             windows[windowNo]->windowPtr = NULL;
-        }
-        
+			return true;
+        }        
     }
+	return false;
 }
 
 //------------------------------------------------------------
@@ -836,8 +836,8 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
         [cocoaWindow makeFirstResponder:cocoaWindow.contentView];
 	}
 #elif defined(TARGET_WIN32)
-    if( windows[currentWindow]->fullscreen){
-        windows[currentWindow]->windowBounds.set(getWindowPosition().x, getWindowPosition().y, getWindowSize().x, getWindowSize.y);
+    if( windows[currentWindow]->bFullscreen){
+        windows[currentWindow]->windowBounds.set(getWindowPosition().x, getWindowPosition().y, getWindowSize().x, getWindowSize().y);
  
 		//----------------------------------------------------
 		HWND hwnd = glfwGetWin32Window(windows[currentWindow]->windowPtr);
@@ -882,7 +882,7 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
  
         SetWindowPos(hwnd, HWND_TOPMOST, xpos, ypos, fullscreenW, fullscreenH, SWP_SHOWWINDOW);
  
-	}else if( windows[currentWindow]->fullscreen == false ){
+	}else if( windows[currentWindow]->bFullscreen == false ){
  
 		HWND hwnd = glfwGetWin32Window(windows[currentWindow]->windowPtr);
  
