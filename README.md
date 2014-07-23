@@ -3,7 +3,7 @@ ofxAppGLFWWindowMulti
 
 - A multiwindow addon for openFrameworks. 
 - Does not require modification to ofApp.cpp. 
-- Currently supports OF 0.8.1 (master branch) and 0.8.2/0.8.3 ( https://github.com/ofTheo/ofxAppGLFWWindowMulti/tree/0.8.2 )
+- Currently supports OF 0.8.1 (master branch) and 0.8.2/0.8.3 ( with 0.8.2 branch https://github.com/ofTheo/ofxAppGLFWWindowMulti/tree/0.8.2 )
 - Tested on OS X - should be compatible with Win/Nix. 
 
 Notes:
