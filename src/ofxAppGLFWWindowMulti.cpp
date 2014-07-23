@@ -1048,18 +1048,15 @@ void ofxAppGLFWWindowMulti::scroll_cb(GLFWwindow* windowP_, double x, double y) 
 }
 
 //------------------------------------------------------------
-void ofxAppGLFWWindowMulti::drop_cb(GLFWwindow* windowP_, const char* dropString) {
+void ofxAppGLFWWindowMulti::drop_cb(GLFWwindow* windowP_, int numFiles, const char** dropString) {
     instance->setCurrentWindowToWin(windowP_); 
 
-	string drop = dropString;
 	ofDragInfo drag;
-	drag.position.set(ofGetMouseX(),ofGetMouseY());
-	drag.files = ofSplitString(drop,"\n",true);
-#ifdef TARGET_LINUX
+	drag.position.set(ofGetMouseX(), ofGetMouseY());
+	drag.files.resize(numFiles);
 	for(int i=0; i<(int)drag.files.size(); i++){
-		drag.files[i] = Poco::URI(drag.files[i]).getPath();
+		drag.files[i] = Poco::URI(dropString[i]).getPath();
 	}
-#endif
 	ofNotifyDragEvent(drag);
 }
 
@@ -1082,13 +1079,13 @@ void ofxAppGLFWWindowMulti::setCurrentWindowToWin(GLFWwindow * windowP_){
 }
 
 //------------------------------------------------------------
-void ofxAppGLFWWindowMulti::keyboard_cb(GLFWwindow* windowP_, int key, int scancode, int action, int mods) {
+void ofxAppGLFWWindowMulti::keyboard_cb(GLFWwindow* windowP_, int keycode, int scancode, unsigned int codepoint, int action, int mods) {
     
-    instance->setCurrentWindowToWin(windowP_);
-    
-	ofLogVerbose("ofxAppGLFWWindowMulti") << "key: " << key << " state: " << action;
+        int key;
 
-	switch (key) {
+
+
+	switch (keycode){
 		case GLFW_KEY_ESCAPE:
 			key = OF_KEY_ESC;
 			break;
@@ -1195,21 +1192,15 @@ void ofxAppGLFWWindowMulti::keyboard_cb(GLFWwindow* windowP_, int key, int scanc
 			key = OF_KEY_TAB;
 			break;   
 		default:
+			key = codepoint;
 			break;
 	}
 
-	//GLFW defaults to uppercase - OF users are used to lowercase
-    //we look and see if shift is being held to toggle upper/lowecase 
-	if( key >= 65 && key <= 90 && !ofGetKeyPressed(OF_KEY_SHIFT) ){
-		key += 32;
-	}
-    
     if(action == GLFW_PRESS || action == GLFW_REPEAT){
-        ofNotifyKeyPressed(key);
+		ofNotifyKeyPressed(key,keycode,scancode,codepoint);
     }else if (action == GLFW_RELEASE){
-        ofNotifyKeyReleased(key);
+		ofNotifyKeyReleased(key,keycode,scancode,codepoint);
     }
-
 }
 
 //------------------------------------------------------------
