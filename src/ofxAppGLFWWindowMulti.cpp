@@ -836,7 +836,7 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
         [cocoaWindow makeFirstResponder:cocoaWindow.contentView];
 	}
 #elif defined(TARGET_WIN32)
-    if( windows[currentWindow]->fullscreen){
+    if( windows[currentWindow]->bFullscreen){
         windows[currentWindow]->windowBounds.set(getWindowPosition().x, getWindowPosition().y, getWindowSize().x, getWindowSize.y);
  
 		//----------------------------------------------------
@@ -882,7 +882,7 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
  
         SetWindowPos(hwnd, HWND_TOPMOST, xpos, ypos, fullscreenW, fullscreenH, SWP_SHOWWINDOW);
  
-	}else if( windows[currentWindow]->fullscreen == false ){
+	}else if( windows[currentWindow]->bFullscreen == false ){
  
 		HWND hwnd = glfwGetWin32Window(windows[currentWindow]->windowPtr);
  
