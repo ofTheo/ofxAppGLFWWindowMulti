@@ -837,7 +837,7 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
 	}
 #elif defined(TARGET_WIN32)
     if( windows[currentWindow]->bFullscreen){
-        windows[currentWindow]->windowBounds.set(getWindowPosition().x, getWindowPosition().y, getWindowSize().x, getWindowSize.y);
+        windows[currentWindow]->windowBounds.set(getWindowPosition().x, getWindowPosition().y, getWindowSize().x, getWindowSize().y);
  
 		//----------------------------------------------------
 		HWND hwnd = glfwGetWin32Window(windows[currentWindow]->windowPtr);
