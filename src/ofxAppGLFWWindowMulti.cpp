@@ -35,6 +35,7 @@
 	#define GLFW_EXPOSE_NATIVE_WIN32
 	#define GLFW_EXPOSE_NATIVE_WGL
 	#include <GLFW/glfw3native.h>
+	#include "Poco/URI.h"
 #endif
 
 
@@ -177,6 +178,8 @@ bool ofxAppGLFWWindowMulti::closeWindow(int windowNo){
         }
         
     }
+
+	return true;
 }
 
 //------------------------------------------------------------
@@ -836,8 +839,8 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
         [cocoaWindow makeFirstResponder:cocoaWindow.contentView];
 	}
 #elif defined(TARGET_WIN32)
-    if( windows[currentWindow]->fullscreen){
-        windows[currentWindow]->windowBounds.set(getWindowPosition().x, getWindowPosition().y, getWindowSize().x, getWindowSize.y);
+    if( windows[currentWindow]->bFullscreen){
+        windows[currentWindow]->windowBounds.set(getWindowPosition().x, getWindowPosition().y, getWindowSize().x, getWindowSize().y);
  
 		//----------------------------------------------------
 		HWND hwnd = glfwGetWin32Window(windows[currentWindow]->windowPtr);
@@ -882,7 +885,7 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
  
         SetWindowPos(hwnd, HWND_TOPMOST, xpos, ypos, fullscreenW, fullscreenH, SWP_SHOWWINDOW);
  
-	}else if( windows[currentWindow]->fullscreen == false ){
+	}else if( windows[currentWindow]->bFullscreen == false ){
  
 		HWND hwnd = glfwGetWin32Window(windows[currentWindow]->windowPtr);
  
