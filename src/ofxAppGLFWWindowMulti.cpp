@@ -178,6 +178,8 @@ bool ofxAppGLFWWindowMulti::closeWindow(int windowNo){
         }
         
     }
+
+	return true;
 }
 
 //------------------------------------------------------------
