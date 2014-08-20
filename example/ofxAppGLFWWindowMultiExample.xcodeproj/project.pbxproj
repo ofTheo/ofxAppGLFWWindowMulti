@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0EABFC1719A4A979009B1998 /* ofxAppGLFWWindowMulti.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0EABFC1319A4A979009B1998 /* ofxAppGLFWWindowMulti.cpp */; };
 		0EABFC1819A4A979009B1998 /* WindowManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0EABFC1519A4A979009B1998 /* WindowManager.cpp */; };
+		0ECDE76119A4AA6800FDB8F8 /* ofxAppGLFWWindowMulti.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0ECDE76019A4AA6800FDB8F8 /* ofxAppGLFWWindowMulti.mm */; };
 		5A4349E9754D6FA14C0F2A3A /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC5DA1C87211D4F6377DA719 /* tinyxmlparser.cpp */; };
 		63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DF87D612C5AAE17AAFA6C0 /* ofxXmlSettings.cpp */; };
 		86BFFAC7195B6736001767CB /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86BFFAC5195B6700001767CB /* Carbon.framework */; };
@@ -67,10 +67,10 @@
 
 /* Begin PBXFileReference section */
 		01DCC0911400F9ACF5B65578 /* ofxXmlSettings.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxXmlSettings.h; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.h; sourceTree = SOURCE_ROOT; };
-		0EABFC1319A4A979009B1998 /* ofxAppGLFWWindowMulti.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxAppGLFWWindowMulti.cpp; sourceTree = "<group>"; };
 		0EABFC1419A4A979009B1998 /* ofxAppGLFWWindowMulti.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxAppGLFWWindowMulti.h; sourceTree = "<group>"; };
 		0EABFC1519A4A979009B1998 /* WindowManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WindowManager.cpp; sourceTree = "<group>"; };
 		0EABFC1619A4A979009B1998 /* WindowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowManager.h; sourceTree = "<group>"; };
+		0ECDE76019A4AA6800FDB8F8 /* ofxAppGLFWWindowMulti.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofxAppGLFWWindowMulti.mm; sourceTree = "<group>"; };
 		2B40EDA85BEB63E46785BC29 /* tinyxml.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = tinyxml.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxml.cpp; sourceTree = SOURCE_ROOT; };
 		50DF87D612C5AAE17AAFA6C0 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxXmlSettings.cpp; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.cpp; sourceTree = SOURCE_ROOT; };
 		832BDC407620CDBA568B713D /* tinyxmlerror.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = tinyxmlerror.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxmlerror.cpp; sourceTree = SOURCE_ROOT; };
@@ -133,7 +133,7 @@
 		0EABFC1219A4A979009B1998 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				0EABFC1319A4A979009B1998 /* ofxAppGLFWWindowMulti.cpp */,
+				0ECDE76019A4AA6800FDB8F8 /* ofxAppGLFWWindowMulti.mm */,
 				0EABFC1419A4A979009B1998 /* ofxAppGLFWWindowMulti.h */,
 				0EABFC1519A4A979009B1998 /* WindowManager.cpp */,
 				0EABFC1619A4A979009B1998 /* WindowManager.h */,
@@ -354,8 +354,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0EABFC1719A4A979009B1998 /* ofxAppGLFWWindowMulti.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
+				0ECDE76119A4AA6800FDB8F8 /* ofxAppGLFWWindowMulti.mm in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */,
 				9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */,
