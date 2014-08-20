@@ -13,6 +13,8 @@
 #include "ofGLProgrammableRenderer.h"
 #include "ofAppRunner.h"
 
+#include "Poco/URI.h"
+
 #ifdef TARGET_LINUX
 	#include "ofIcon.h"
 	#include "ofImage.h"
@@ -24,7 +26,6 @@
 	#endif
 	#include "GLFW/glfw3native.h"
 	#include <X11/Xatom.h>
-	#include "Poco/URI.h"
 #elif defined(TARGET_OSX)
 	#include <Cocoa/Cocoa.h>
 	#include <Carbon/Carbon.h>
@@ -35,7 +36,6 @@
 	#define GLFW_EXPOSE_NATIVE_WIN32
 	#define GLFW_EXPOSE_NATIVE_WGL
 	#include <GLFW/glfw3native.h>
-	#include "Poco/URI.h"
 #endif
 
 
