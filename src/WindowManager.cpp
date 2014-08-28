@@ -31,6 +31,10 @@ int WindowManager::getActiveWindowNo(){
 }
 
 //--------------------------------------------------------------
+int WindowManager::getFocusedWindowNo(){
+    return windowPtr->getFocusedWindowNo();
+}
+//--------------------------------------------------------------
 void WindowManager::createWindow(){
     if( windowPtr == NULL ){
         ofLogError("WindowManager::createWindow") << " windowPtr needs to be set " << endl;

@@ -84,6 +84,7 @@ public:
 
     //begin multi window stuff
     int getCurrentWindowNo();
+    int getFocusedWindowNo();
     bool isWindowInFocus(int winNo);
     
     int addWindow(string windowName = "", float x = 0, float y = 0, float w = 1024, float h = 768, bool bFullscreen = false);
@@ -161,7 +162,7 @@ public:
 #endif
 
     //so we get set the correct window for events in key pressed mouse etc.
-    void setCurrentWindowToWin(GLFWwindow * windowP_); 
+    void setFocusedWindow(GLFWwindow * windowP_);
 
 private:
 	// callbacks
@@ -203,8 +204,9 @@ private:
 	
 	static ofxAppGLFWWindowMulti	* instance;
 	static ofBaseApp *	ofAppPtr;
-    
-    int currentWindow; 
+
+    int currentWindow;
+    int focusedWindow;
     vector < shared_ptr <AppGLFWSingleWindow> > windows;
     vector <int> windowStack;
 

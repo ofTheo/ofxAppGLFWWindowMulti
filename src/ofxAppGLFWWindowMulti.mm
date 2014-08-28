@@ -74,7 +74,9 @@ ofxAppGLFWWindowMulti::ofxAppGLFWWindowMulti():ofAppBaseWindow(){
 
     currentWindow = 0;
     
-    //default to 4 times antialiasing. 
+    focusedWindow = 0;
+
+    //default to 4 times antialiasing.
     setNumSamples(4);
 	iconSet = false;
     isSetup = false;
@@ -164,7 +166,7 @@ int ofxAppGLFWWindowMulti::addWindow(string windowName, float x, float y, float 
         if( isSetup ){
             initializeWindow();
         }
-    
+        setFocusedWindow(winPtr->windowPtr);
         return winPtr->windowNo;
 }
 
@@ -201,15 +203,17 @@ int ofxAppGLFWWindowMulti::getNumActiveWindows() {
 
 //------------------------------------------------------------
 int ofxAppGLFWWindowMulti::getCurrentWindowNo(){
-    return currentWindow; 
+    return currentWindow;
+}
+
+//------------------------------------------------------------
+int ofxAppGLFWWindowMulti::getFocusedWindowNo(){
+    return focusedWindow;
 }
 
 //------------------------------------------------------------
 bool ofxAppGLFWWindowMulti::isWindowInFocus(int winNo){
-    if( winNo >= 0 && winNo < windows.size() ){
-        return windows[winNo]->bInFocus;
-    }
-    return false; 
+    return winNo == getFocusedWindowNo();
 }
 
 //------------------------------------------------------------
@@ -223,6 +227,7 @@ bool ofxAppGLFWWindowMulti::pushWindow(int newWindow){
         if( windows[newWindow]->windowPtr != NULL ){
             windowStack.push_back(currentWindow);
             currentWindow = newWindow;
+            focusedWindow = newWindow;
             return true;
         }
     }
@@ -237,6 +242,7 @@ void ofxAppGLFWWindowMulti::popWindow(){
         if( newWindow >= 0 && newWindow < windows.size() ){
             if( windows[newWindow]->windowPtr != NULL ){
                 currentWindow = newWindow;
+                focusedWindow = newWindow;
             }else{
                 currentWindow = 0;
             }
@@ -970,7 +976,7 @@ static void rotateMouseXY(ofOrientation orientation, double &x, double &y) {
 
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::mouse_cb(GLFWwindow* windowP_, int button, int state, int mods) {
-    instance->setCurrentWindowToWin(windowP_); 
+    instance->setFocusedWindow(windowP_);
 
 	ofLogVerbose("ofxAppGLFWWindowMulti") << "mouse button: " << button;
 
@@ -995,18 +1001,18 @@ void ofxAppGLFWWindowMulti::mouse_cb(GLFWwindow* windowP_, int button, int state
 		button = OF_MOUSE_BUTTON_MIDDLE;
 		break;
 	}
-    
-    ofPoint mousePt = instance->windows[instance->currentWindow]->mousePt;
+
+    ofPoint mousePt = instance->windows[instance->focusedWindow]->mousePt;
 
 	if (state == GLFW_PRESS){
-        if( instance->currentWindow == 0 ){
+        if( instance->focusedWindow == 0 ){
             ofNotifyMousePressed(mousePt.x, mousePt.y, button);
         }else{
             ofAppPtr->mousePressed(mousePt.x, mousePt.y, button);
         }
 		instance->buttonPressed=true;
 	} else if (state == GLFW_RELEASE) {
-        if( instance->currentWindow == 0 ){
+        if( instance->focusedWindow == 0 ){
             ofNotifyMouseReleased(mousePt.x, mousePt.y, button);
         }else{
             ofAppPtr->mouseReleased(mousePt.x, mousePt.y, button);
@@ -1020,13 +1026,13 @@ void ofxAppGLFWWindowMulti::mouse_cb(GLFWwindow* windowP_, int button, int state
 
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::motion_cb(GLFWwindow* windowP_, double x, double y) {
-    instance->setCurrentWindowToWin(windowP_); 
+    instance->setFocusedWindow(windowP_);
 
 	rotateMouseXY(ofGetOrientation(), x, y);
-    
-    instance->windows[instance->currentWindow]->mousePt.set(x, y);
 
-    if( instance->currentWindow == 0 ){
+    instance->windows[instance->focusedWindow]->mousePt.set(x, y);
+
+    if( instance->focusedWindow == 0 ){
 
         if(!instance->buttonPressed){
             ofNotifyMouseMoved(x, y);
@@ -1052,7 +1058,7 @@ void ofxAppGLFWWindowMulti::scroll_cb(GLFWwindow* windowP_, double x, double y) 
 
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::drop_cb(GLFWwindow* windowP_, int numFiles, const char** dropString) {
-    instance->setCurrentWindowToWin(windowP_); 
+    instance->setFocusedWindow(windowP_);
 
 	ofDragInfo drag;
 	drag.position.set(ofGetMouseX(), ofGetMouseY());
@@ -1065,18 +1071,14 @@ void ofxAppGLFWWindowMulti::drop_cb(GLFWwindow* windowP_, int numFiles, const ch
 
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::focus_cb(GLFWwindow* windowP_, int focus){
-    for(int i = 0; i < instance->windows.size(); i++){
-        if( instance->windows[i]->windowPtr == windowP_ ){
-            instance->windows[i]->bInFocus = focus; 
-        }
-    }
+    instance->setFocusedWindow(windowP_);
 }
 
 //------------------------------------------------------------
-void ofxAppGLFWWindowMulti::setCurrentWindowToWin(GLFWwindow * windowP_){
+void ofxAppGLFWWindowMulti::setFocusedWindow(GLFWwindow * windowP_){
     for(int i = 0; i < windows.size(); i++){
         if( windows[i]->windowPtr && windows[i]->windowPtr == windowP_ ){
-            currentWindow = windows[i]->windowNo; 
+            focusedWindow = windows[i]->windowNo;
         }
     }
 }
@@ -1208,11 +1210,12 @@ void ofxAppGLFWWindowMulti::keyboard_cb(GLFWwindow* windowP_, int keycode, int s
 
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::resize_cb(GLFWwindow* windowP_,int w, int h) {
-    instance->setCurrentWindowToWin(windowP_); 
+    instance->setFocusedWindow(windowP_);
 
 	instance->getWindowSize();
     
     //only do resize notification for main window
+    //TODO: should this be so? resize useful for other windows
     if(windowP_ == instance->windows[0]->windowPtr){
         ofNotifyWindowResized(w, h);
     }
