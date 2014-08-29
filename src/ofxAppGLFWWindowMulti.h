@@ -116,6 +116,7 @@ public:
 	int getWidth();
 
 	ofVec3f		getWindowSize();
+    ofVec3f		getWindowSize(int winNo);
 	ofVec3f		getScreenSize();
 	ofVec3f 	getWindowPosition();
 
@@ -199,7 +200,8 @@ private:
 	bool			bDoubleBuffered;
     bool            bMultiWindowFullscreen;
     bool            isSetup; 
-    
+
+    ofPoint         updateWindowSize(int winNo);
 	int				getCurrentMonitor();
 	
 	static ofxAppGLFWWindowMulti	* instance;

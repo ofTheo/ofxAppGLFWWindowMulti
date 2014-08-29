@@ -337,7 +337,7 @@ void ofxAppGLFWWindowMulti::setupOpenGL(int w, int h, int screenMode){
         }
         
         //update our window info
-        getWindowSize();
+        updateWindowSize(i);
         getWindowPosition();
     }
     
@@ -520,19 +520,29 @@ void ofxAppGLFWWindowMulti::setWindowTitle(string title){
 }
 
 //------------------------------------------------------------
-ofPoint ofxAppGLFWWindowMulti::getWindowSize(){
-    int windowW, windowH; 
-    glfwGetWindowSize(windows[currentWindow]->windowPtr,&windowW,&windowH);
-    
-    if( windows[currentWindow]->bFullscreen == false ){
-        windows[currentWindow]->windowBounds.width  = windowW;
-        windows[currentWindow]->windowBounds.height = windowH;
+ofPoint ofxAppGLFWWindowMulti::updateWindowSize(int winNo) {
+    int windowW, windowH;
+    glfwGetWindowSize(windows[winNo]->windowPtr,&windowW,&windowH);
+
+    if( windows[winNo]->bFullscreen == false ){
+        windows[winNo]->windowBounds.width  = windowW;
+        windows[winNo]->windowBounds.height = windowH;
     }else{
-        windows[currentWindow]->fullScreenBounds.width  = windowW;
-        windows[currentWindow]->fullScreenBounds.height = windowH;
+        windows[winNo]->fullScreenBounds.width  = windowW;
+        windows[winNo]->fullScreenBounds.height = windowH;
     }
-    
-    return ofPoint(windowW,windowH);
+
+    return ofPoint(windowW, windowH);
+}
+
+//------------------------------------------------------------
+ofPoint ofxAppGLFWWindowMulti::getWindowSize(){
+    return updateWindowSize(currentWindow);
+}
+
+//------------------------------------------------------------
+ofPoint ofxAppGLFWWindowMulti::getWindowSize(int winNo){
+    return updateWindowSize(winNo);
 }
 
 //------------------------------------------------------------
@@ -775,7 +785,10 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
     int currentMonitor = getCurrentMonitor();
 
 	if( windows[currentWindow]->bFullscreen ){
-        windows[currentWindow]->windowBounds.set(getWindowPosition().x, getWindowPosition().y, getWindowSize().x, getWindowSize().y);
+        windows[currentWindow]->windowBounds.set(getWindowPosition().x,
+                                                 getWindowPosition().y,
+                                                 getWindowSize(currentWindow).x,
+                                                 getWindowSize(currentWindow).y);
  
 		//----------------------------------------------------
         if( currentMonitor == 0 ){
@@ -846,7 +859,10 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
 	}
 #elif defined(TARGET_WIN32)
     if( windows[currentWindow]->bFullscreen){
-        windows[currentWindow]->windowBounds.set(getWindowPosition().x, getWindowPosition().y, getWindowSize().x, getWindowSize().y);
+        windows[currentWindow]->windowBounds.set(getWindowPosition().x,
+                                                 getWindowPosition().y,
+                                                 getWindowSize(currentWindow).x,
+                                                 getWindowSize(currentWindow).y);
  
 		//----------------------------------------------------
 		HWND hwnd = glfwGetWin32Window(windows[currentWindow]->windowPtr);
@@ -1212,7 +1228,7 @@ void ofxAppGLFWWindowMulti::keyboard_cb(GLFWwindow* windowP_, int keycode, int s
 void ofxAppGLFWWindowMulti::resize_cb(GLFWwindow* windowP_,int w, int h) {
     instance->setFocusedWindow(windowP_);
 
-	instance->getWindowSize();
+    instance->updateWindowSize(instance->getFocusedWindowNo());
     
     //only do resize notification for main window
     //TODO: should this be so? resize useful for other windows
