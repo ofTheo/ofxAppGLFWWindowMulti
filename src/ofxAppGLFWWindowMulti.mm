@@ -592,26 +592,30 @@ int ofxAppGLFWWindowMulti::getCurrentMonitor(){
 	return 0;
 }
 
+//------------------------------------------------------------
+ofPoint ofxAppGLFWWindowMulti::getScreenSize(int winNo){
+    int count;
+    GLFWmonitor** monitors = glfwGetMonitors(&count);
+    if(count>0){
+        int currentMonitor = getCurrentMonitor();
+        const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[winNo]);
+        if(desktopMode){
+            if( orientation == OF_ORIENTATION_DEFAULT || orientation == OF_ORIENTATION_180 ){
+                return ofVec3f(desktopMode->width, desktopMode->height,0);
+            }else{
+                return ofPoint(0,0);
+            }
+        }else{
+            return ofPoint(0,0);
+        }
+    }else{
+        return ofPoint(0,0);
+    }
+}
 
 //------------------------------------------------------------
 ofPoint ofxAppGLFWWindowMulti::getScreenSize(){
-	int count;
-	GLFWmonitor** monitors = glfwGetMonitors(&count);
-	if(count>0){
-		int currentMonitor = getCurrentMonitor();
-		const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[currentMonitor]);
-		if(desktopMode){
-			if( orientation == OF_ORIENTATION_DEFAULT || orientation == OF_ORIENTATION_180 ){
-				return ofVec3f(desktopMode->width, desktopMode->height,0);
-			}else{
-				return ofPoint(0,0);
-			}
-		}else{
-			return ofPoint(0,0);
-		}
-	}else{
-		return ofPoint(0,0);
-	}
+    return getScreenSize(currentWindow);
 }
 
 //------------------------------------------------------------

@@ -120,6 +120,7 @@ public:
 	ofVec3f		getWindowSize();
     ofVec3f		getWindowSize(int winNo);
 	ofVec3f		getScreenSize();
+    ofVec3f		getScreenSize(int winNo);
 	ofVec3f 	getWindowPosition();
 
 	void setWindowTitle(string title);
