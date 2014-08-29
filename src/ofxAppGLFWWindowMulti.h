@@ -112,8 +112,10 @@ public:
 	void hideCursor();
 	void showCursor();
 
-	int getHeight();
-	int getWidth();
+    int getHeight(int winNo);
+    int getHeight();
+    int getWidth(int winNo);
+    int getWidth();
 
 	ofVec3f		getWindowSize();
     ofVec3f		getWindowSize(int winNo);

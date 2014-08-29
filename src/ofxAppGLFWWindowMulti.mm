@@ -615,7 +615,7 @@ ofPoint ofxAppGLFWWindowMulti::getScreenSize(){
 }
 
 //------------------------------------------------------------
-int ofxAppGLFWWindowMulti::getWidth(){
+int ofxAppGLFWWindowMulti::getWidth(int winNo){
     if( orientation == OF_ORIENTATION_DEFAULT || orientation == OF_ORIENTATION_180 ){
         return getWindowSize().x;
     }else{
@@ -624,13 +624,22 @@ int ofxAppGLFWWindowMulti::getWidth(){
 }
 
 //------------------------------------------------------------
-int ofxAppGLFWWindowMulti::getHeight()
-{
+int ofxAppGLFWWindowMulti::getWidth(){
+    return getWidth(currentWindow);
+}
+
+//------------------------------------------------------------
+int ofxAppGLFWWindowMulti::getHeight(int winNo){
     if( orientation == OF_ORIENTATION_DEFAULT || orientation == OF_ORIENTATION_180 ){
         return getWindowSize().y;
     }else{
         return getWindowSize().x;
     }
+}
+
+//------------------------------------------------------------
+int ofxAppGLFWWindowMulti::getHeight(){
+    return getHeight(currentWindow);
 }
 
 //------------------------------------------------------------
