@@ -546,19 +546,24 @@ ofPoint ofxAppGLFWWindowMulti::getWindowSize(int winNo){
 }
 
 //------------------------------------------------------------
-ofPoint ofxAppGLFWWindowMulti::getWindowPosition(){
-    int x, y; 
-	glfwGetWindowPos(windows[currentWindow]->windowPtr, &x, &y);
-    
-    if( windows[currentWindow]->bFullscreen == false ){
-        windows[currentWindow]->windowBounds.x = x;
-        windows[currentWindow]->windowBounds.y = y;
+ofPoint ofxAppGLFWWindowMulti::getWindowPosition(int winNo){
+    int x, y;
+    glfwGetWindowPos(windows[winNo]->windowPtr, &x, &y);
+
+    if( windows[winNo]->bFullscreen == false ){
+        windows[winNo]->windowBounds.x = x;
+        windows[winNo]->windowBounds.y = y;
     }else{
-        windows[currentWindow]->fullScreenBounds.x = x;
-        windows[currentWindow]->fullScreenBounds.y = y;
+        windows[winNo]->fullScreenBounds.x = x;
+        windows[winNo]->fullScreenBounds.y = y;
     }
-    
+
     return ofPoint(x,y,0);
+}
+
+//------------------------------------------------------------
+ofPoint ofxAppGLFWWindowMulti::getWindowPosition(){
+    return getWindowPosition(currentWindow);
 }
 
 //------------------------------------------------------------

@@ -117,11 +117,12 @@ public:
     int getWidth(int winNo);
     int getWidth();
 
-	ofVec3f		getWindowSize();
-    ofVec3f		getWindowSize(int winNo);
-	ofVec3f		getScreenSize();
-    ofVec3f		getScreenSize(int winNo);
-	ofVec3f 	getWindowPosition();
+    ofVec3f     getWindowSize(int winNo);
+    ofVec3f     getWindowSize();
+    ofVec3f     getScreenSize(int winNo);
+    ofVec3f     getScreenSize();
+    ofVec3f     getWindowPosition(int winNo);
+    ofVec3f     getWindowPosition();
 
 	void setWindowTitle(string title);
 	void setWindowPosition(int x, int y);
