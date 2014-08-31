@@ -117,6 +117,7 @@ public:
     int getWidth(int winNo);
     int getWidth();
 
+    int         getWindowMonitor(int winNo);
     ofVec3f     getWindowSize(int winNo);
     ofVec3f     getWindowSize();
     ofVec3f     getScreenSize(int winNo);

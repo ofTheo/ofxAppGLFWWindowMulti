@@ -567,20 +567,19 @@ ofPoint ofxAppGLFWWindowMulti::getWindowPosition(){
 }
 
 //------------------------------------------------------------
+int ofxAppGLFWWindowMulti::getWindowMonitor(int winNo){
+    int numberOfMonitors;
+    GLFWmonitor** monitors = glfwGetMonitors(&numberOfMonitors);
 
-int ofxAppGLFWWindowMulti::getCurrentMonitor(){
-	int numberOfMonitors;
-	GLFWmonitor** monitors = glfwGetMonitors(&numberOfMonitors);
+    int xW;	int yW;
+    glfwGetWindowPos(windows[winNo]->windowPtr, &xW, &yW);
 
-	int xW;	int yW;
-	glfwGetWindowPos(windows[currentWindow]->windowPtr, &xW, &yW);
-    
-	for (int iC=0; iC < numberOfMonitors; iC++){
-		int xM; int yM;
-		glfwGetMonitorPos(monitors[iC], &xM, &yM);
-		const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[iC]);
-		ofRectangle monitorRect(xM, yM, desktopMode->width, desktopMode->height);
-        
+    for (int iC=0; iC < numberOfMonitors; iC++){
+        int xM; int yM;
+        glfwGetMonitorPos(monitors[iC], &xM, &yM);
+        const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[iC]);
+        ofRectangle monitorRect(xM, yM, desktopMode->width, desktopMode->height);
+
         //we have to do this so the inside returns true for a window going fullscreen on that monitor
         if( xW == xM ){
             xW += 1;
@@ -588,13 +587,18 @@ int ofxAppGLFWWindowMulti::getCurrentMonitor(){
         if( yW == yM ){
             yW += 1;
         }
-        
-		if (monitorRect.inside(xW, yW)){
-			return iC;
-			break;
-		}
-	}
-	return 0;
+
+        if (monitorRect.inside(xW, yW)){
+            return iC;
+            break;
+        }
+    }
+    return 0;
+}
+
+//------------------------------------------------------------
+int ofxAppGLFWWindowMulti::getCurrentMonitor(){
+    return getWindowMonitor(currentWindow);
 }
 
 //------------------------------------------------------------
@@ -602,8 +606,8 @@ ofPoint ofxAppGLFWWindowMulti::getScreenSize(int winNo){
     int count;
     GLFWmonitor** monitors = glfwGetMonitors(&count);
     if(count>0){
-        int currentMonitor = getCurrentMonitor();
-        const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[winNo]);
+        int winMonitor = getWindowMonitor(winNo);
+        const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[winMonitor]);
         if(desktopMode){
             if( orientation == OF_ORIENTATION_DEFAULT || orientation == OF_ORIENTATION_180 ){
                 return ofVec3f(desktopMode->width, desktopMode->height,0);
