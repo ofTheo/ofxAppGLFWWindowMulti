@@ -83,11 +83,11 @@ void WindowManager::toggleFullscreen(int windowNo){
 }
 
 //--------------------------------------------------------------
-void WindowManager::closeActiveWindow(){
+void WindowManager::closeFocusedWindow(){
     if( windowPtr == NULL ){
-        ofLogError("WindowManager::closeActiveWindow") << " windowPtr needs to be set " << endl;
+        ofLogError("WindowManager::closeFocusedWindow") << " windowPtr needs to be set " << endl;
     }
-    windowPtr->closeWindow(getActiveWindowNo());
+    windowPtr->closeWindow(getFocusedWindowNo());
 }
 
 //--------------------------------------------------------------
