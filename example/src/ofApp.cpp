@@ -10,6 +10,11 @@ void ofApp::setup(){
     winManager.setup((ofxAppGLFWWindowMulti *)ofGetWindowPtr());
     winManager.loadWindowSettings();
 
+    ofSetWindowTitle("main window");
+    winManager.createWindow();
+    winManager.setWindowTitle(1, "second window");
+    winManager.setWindowShape(1, 300, 300);
+
 }
 
 //--------------------------------------------------------------
