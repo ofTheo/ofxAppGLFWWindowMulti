@@ -698,13 +698,24 @@ int	ofxAppGLFWWindowMulti::getWindowMode(){
 }
 
 //------------------------------------------------------------
-void ofxAppGLFWWindowMulti::setWindowPosition(int x, int y){
-    glfwSetWindowPos(windows[currentWindow]->windowPtr,x,y);
-    
-    if( windows[currentWindow]->bFullscreen == false ){
-        windows[currentWindow]->windowBounds.x = x;
-        windows[currentWindow]->windowBounds.y = y;
+void ofxAppGLFWWindowMulti::setWindowPosition(int windowNo, int x, int y){
+    if (!ofInRange(windowNo, 0, windows.size())) {
+        ofLogError("ofxAppGLFWWindowMulti") << "setWindowPosition()"
+            << "window doesn't exist with windowNo: " << windowNo;
+        return;
     }
+
+    glfwSetWindowPos(windows[windowNo]->windowPtr,x,y);
+    
+    if( windows[windowNo]->bFullscreen == false ){
+        windows[windowNo]->windowBounds.x = x;
+        windows[windowNo]->windowBounds.y = y;
+    }
+}
+
+//------------------------------------------------------------
+void ofxAppGLFWWindowMulti::setWindowPosition(int x, int y){
+    setWindowPosition(currentWindow, x, x);
 }
 
 //------------------------------------------------------------
