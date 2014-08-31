@@ -181,6 +181,9 @@ bool ofxAppGLFWWindowMulti::closeWindow(int windowNo){
         
     }
 
+    ofLogError("ofxAppGLFWWindowMulti") << "closeWindow(): "
+        << "window doesn't exist with windowNo: " << windowNo;
+
 	return true;
 }
 
@@ -212,8 +215,8 @@ int ofxAppGLFWWindowMulti::getFocusedWindowNo(){
 }
 
 //------------------------------------------------------------
-bool ofxAppGLFWWindowMulti::isWindowInFocus(int winNo){
-    return winNo == getFocusedWindowNo();
+bool ofxAppGLFWWindowMulti::isWindowInFocus(int windowNo){
+    return windowNo == getFocusedWindowNo();
 }
 
 //------------------------------------------------------------
@@ -520,19 +523,26 @@ void ofxAppGLFWWindowMulti::setWindowTitle(string title){
 }
 
 //------------------------------------------------------------
-ofPoint ofxAppGLFWWindowMulti::updateWindowSize(int winNo) {
-    int windowW, windowH;
-    glfwGetWindowSize(windows[winNo]->windowPtr,&windowW,&windowH);
+ofPoint ofxAppGLFWWindowMulti::updateWindowSize(int windowNo) {
+    if(windowNo >= 0 && windowNo < windows.size()){
+        int windowW, windowH;
+        glfwGetWindowSize(windows[windowNo]->windowPtr,&windowW,&windowH);
 
-    if( windows[winNo]->bFullscreen == false ){
-        windows[winNo]->windowBounds.width  = windowW;
-        windows[winNo]->windowBounds.height = windowH;
-    }else{
-        windows[winNo]->fullScreenBounds.width  = windowW;
-        windows[winNo]->fullScreenBounds.height = windowH;
+        if( windows[windowNo]->bFullscreen == false ){
+            windows[windowNo]->windowBounds.width  = windowW;
+            windows[windowNo]->windowBounds.height = windowH;
+        }else{
+            windows[windowNo]->fullScreenBounds.width  = windowW;
+            windows[windowNo]->fullScreenBounds.height = windowH;
+        }
+
+        return ofPoint(windowW, windowH);
     }
 
-    return ofPoint(windowW, windowH);
+    ofLogError("ofxAppGLFWWindowMulti") << "updateWindowSize(): "
+        << "window doesn't exist with windowNo: " << windowNo;
+
+    return ofPoint(0,0);
 }
 
 //------------------------------------------------------------
@@ -541,24 +551,31 @@ ofPoint ofxAppGLFWWindowMulti::getWindowSize(){
 }
 
 //------------------------------------------------------------
-ofPoint ofxAppGLFWWindowMulti::getWindowSize(int winNo){
-    return updateWindowSize(winNo);
+ofPoint ofxAppGLFWWindowMulti::getWindowSize(int windowNo){
+    return updateWindowSize(windowNo);
 }
 
 //------------------------------------------------------------
-ofPoint ofxAppGLFWWindowMulti::getWindowPosition(int winNo){
-    int x, y;
-    glfwGetWindowPos(windows[winNo]->windowPtr, &x, &y);
+ofPoint ofxAppGLFWWindowMulti::getWindowPosition(int windowNo){
+    if(windowNo >= 0 && windowNo < windows.size()){
+        int x, y;
+        glfwGetWindowPos(windows[windowNo]->windowPtr, &x, &y);
 
-    if( windows[winNo]->bFullscreen == false ){
-        windows[winNo]->windowBounds.x = x;
-        windows[winNo]->windowBounds.y = y;
-    }else{
-        windows[winNo]->fullScreenBounds.x = x;
-        windows[winNo]->fullScreenBounds.y = y;
+        if( windows[windowNo]->bFullscreen == false ){
+            windows[windowNo]->windowBounds.x = x;
+            windows[windowNo]->windowBounds.y = y;
+        }else{
+            windows[windowNo]->fullScreenBounds.x = x;
+            windows[windowNo]->fullScreenBounds.y = y;
+        }
+
+        return ofPoint(x,y,0);
     }
 
-    return ofPoint(x,y,0);
+    ofLogError("ofxAppGLFWWindowMulti") << "getWindowPosition(): "
+        << "window doesn't exist with windowNo: " << windowNo;
+
+    return ofPoint(0,0,0);
 }
 
 //------------------------------------------------------------
@@ -567,33 +584,40 @@ ofPoint ofxAppGLFWWindowMulti::getWindowPosition(){
 }
 
 //------------------------------------------------------------
-int ofxAppGLFWWindowMulti::getWindowMonitor(int winNo){
-    int numberOfMonitors;
-    GLFWmonitor** monitors = glfwGetMonitors(&numberOfMonitors);
+int ofxAppGLFWWindowMulti::getWindowMonitor(int windowNo){
+    if(windowNo >= 0 && windowNo < windows.size()){
+        int numberOfMonitors;
+        GLFWmonitor** monitors = glfwGetMonitors(&numberOfMonitors);
 
-    int xW;	int yW;
-    glfwGetWindowPos(windows[winNo]->windowPtr, &xW, &yW);
+        int xW;	int yW;
+        glfwGetWindowPos(windows[windowNo]->windowPtr, &xW, &yW);
 
-    for (int iC=0; iC < numberOfMonitors; iC++){
-        int xM; int yM;
-        glfwGetMonitorPos(monitors[iC], &xM, &yM);
-        const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[iC]);
-        ofRectangle monitorRect(xM, yM, desktopMode->width, desktopMode->height);
+        for (int iC=0; iC < numberOfMonitors; iC++){
+            int xM; int yM;
+            glfwGetMonitorPos(monitors[iC], &xM, &yM);
+            const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[iC]);
+            ofRectangle monitorRect(xM, yM, desktopMode->width, desktopMode->height);
 
-        //we have to do this so the inside returns true for a window going fullscreen on that monitor
-        if( xW == xM ){
-            xW += 1;
+            //we have to do this so the inside returns true for a window going fullscreen on that monitor
+            if( xW == xM ){
+                xW += 1;
+            }
+            if( yW == yM ){
+                yW += 1;
+            }
+
+            if (monitorRect.inside(xW, yW)){
+                return iC;
+                break;
+            }
         }
-        if( yW == yM ){
-            yW += 1;
-        }
-
-        if (monitorRect.inside(xW, yW)){
-            return iC;
-            break;
-        }
+        return 0;
     }
-    return 0;
+
+    ofLogError("ofxAppGLFWWindowMulti") << "getWindowMonitor(): "
+        << "window doesn't exist with windowNo: " << windowNo;
+
+    return -1;
 }
 
 //------------------------------------------------------------
@@ -602,17 +626,17 @@ int ofxAppGLFWWindowMulti::getCurrentMonitor(){
 }
 
 //------------------------------------------------------------
-ofPoint ofxAppGLFWWindowMulti::getScreenSize(int winNo){
-    int count;
-    GLFWmonitor** monitors = glfwGetMonitors(&count);
-    if(count>0){
-        int winMonitor = getWindowMonitor(winNo);
-        const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[winMonitor]);
-        if(desktopMode){
-            if( orientation == OF_ORIENTATION_DEFAULT || orientation == OF_ORIENTATION_180 ){
-                return ofVec3f(desktopMode->width, desktopMode->height,0);
-            }else{
-                return ofPoint(0,0);
+ofPoint ofxAppGLFWWindowMulti::getScreenSize(int windowNo){
+    if(windowNo >= 0 && windowNo < windows.size()){
+        int count;
+        GLFWmonitor** monitors = glfwGetMonitors(&count);
+        if(count>0){
+            int winMonitor = getWindowMonitor(windowNo);
+            const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[winMonitor]);
+            if(desktopMode){
+                if( orientation == OF_ORIENTATION_DEFAULT || orientation == OF_ORIENTATION_180 ){
+                    return ofVec3f(desktopMode->width, desktopMode->height,0);
+                }
             }
         }else{
             return ofPoint(0,0);
@@ -620,6 +644,11 @@ ofPoint ofxAppGLFWWindowMulti::getScreenSize(int winNo){
     }else{
         return ofPoint(0,0);
     }
+
+    ofLogError("ofxAppGLFWWindowMulti") << "getScreenSize(): "
+        << "window doesn't exist with windowNo: " << windowNo;
+
+    return ofPoint(0,0);
 }
 
 //------------------------------------------------------------
@@ -628,11 +657,11 @@ ofPoint ofxAppGLFWWindowMulti::getScreenSize(){
 }
 
 //------------------------------------------------------------
-int ofxAppGLFWWindowMulti::getWidth(int winNo){
+int ofxAppGLFWWindowMulti::getWidth(int windowNo){
     if( orientation == OF_ORIENTATION_DEFAULT || orientation == OF_ORIENTATION_180 ){
-        return getWindowSize().x;
+        return getWindowSize(windowNo).x;
     }else{
-        return getWindowSize().y;
+        return getWindowSize(windowNo).y;
     }
 }
 
@@ -642,11 +671,11 @@ int ofxAppGLFWWindowMulti::getWidth(){
 }
 
 //------------------------------------------------------------
-int ofxAppGLFWWindowMulti::getHeight(int winNo){
+int ofxAppGLFWWindowMulti::getHeight(int windowNo){
     if( orientation == OF_ORIENTATION_DEFAULT || orientation == OF_ORIENTATION_180 ){
-        return getWindowSize().y;
+        return getWindowSize(windowNo).y;
     }else{
-        return getWindowSize().x;
+        return getWindowSize(windowNo).x;
     }
 }
 
@@ -656,8 +685,15 @@ int ofxAppGLFWWindowMulti::getHeight(){
 }
 
 //------------------------------------------------------------
-int ofxAppGLFWWindowMulti::getWindowMode(int winNo){
-	return ( windows[winNo]->bFullscreen ? OF_FULLSCREEN : OF_WINDOW );
+int ofxAppGLFWWindowMulti::getWindowMode(int windowNo){
+    if(windowNo >= 0 && windowNo < windows.size()){
+        return ( windows[windowNo]->bFullscreen ? OF_FULLSCREEN : OF_WINDOW );
+    }
+
+    ofLogError("ofxAppGLFWWindowMulti") << "getWindowMode(): "
+        << "window doesn't exist with windowNo: " << windowNo;
+
+    return -1;
 }
 
 //------------------------------------------------------------

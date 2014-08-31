@@ -85,7 +85,7 @@ public:
     //begin multi window stuff
     int getCurrentWindowNo();
     int getFocusedWindowNo();
-    bool isWindowInFocus(int winNo);
+    bool isWindowInFocus(int windowNo);
     
     int addWindow(string windowName = "", float x = 0, float y = 0, float w = 1024, float h = 768, bool bFullscreen = false);
     bool closeWindow(int windowNo);
@@ -112,17 +112,17 @@ public:
 	void hideCursor();
 	void showCursor();
 
-    int getHeight(int winNo);
+    int getHeight(int windowNo);
     int getHeight();
-    int getWidth(int winNo);
+    int getWidth(int windowNo);
     int getWidth();
 
-    int         getWindowMonitor(int winNo);
-    ofVec3f     getWindowSize(int winNo);
+    int         getWindowMonitor(int windowNo);
+    ofVec3f     getWindowSize(int windowNo);
     ofVec3f     getWindowSize();
-    ofVec3f     getScreenSize(int winNo);
+    ofVec3f     getScreenSize(int windowNo);
     ofVec3f     getScreenSize();
-    ofVec3f     getWindowPosition(int winNo);
+    ofVec3f     getWindowPosition(int windowNo);
     ofVec3f     getWindowPosition();
 
 	void setWindowTitle(string title);
@@ -132,7 +132,7 @@ public:
 	void			setOrientation(ofOrientation orientation);
 	ofOrientation	getOrientation();
 
-    int         getWindowMode(int winNo);
+    int         getWindowMode(int windowNo);
     int         getWindowMode();
 
 	void		setFullscreen(bool fullscreen);
@@ -207,7 +207,7 @@ private:
     bool            bMultiWindowFullscreen;
     bool            isSetup; 
 
-    ofPoint         updateWindowSize(int winNo);
+    ofPoint         updateWindowSize(int windowNo);
 	int				getCurrentMonitor();
 	
 	static ofxAppGLFWWindowMulti	* instance;
