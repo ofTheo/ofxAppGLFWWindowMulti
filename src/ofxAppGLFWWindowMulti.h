@@ -138,7 +138,9 @@ public:
     int         getWindowMode(int windowNo);
     int         getWindowMode();
 
+    void		setFullscreen(int windowNo, bool fullscreen);
 	void		setFullscreen(bool fullscreen);
+    void		toggleFullscreen(int windowNo);
 	void		toggleFullscreen();
 
 	void		enableSetupScreen();

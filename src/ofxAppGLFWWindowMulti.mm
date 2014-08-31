@@ -765,21 +765,25 @@ void ofxAppGLFWWindowMulti::disableSetupScreen(){
 };
 
 //------------------------------------------------------------
-void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
- 
+void ofxAppGLFWWindowMulti::setFullscreen(int windowNo, bool fullscreen){
+    if (!ofInRange(windowNo, 0, windows.size())) {
+        ofLogError("ofxAppGLFWWindowMulti") << "setFullScreen()"
+            << "window doesn't exist with windowNo: " << windowNo;
+        return;
+    }
     //we only want to change window mode if the requested window is different to the current one.
-    bool bChanged = fullscreen != windows[currentWindow]->bFullscreen;
+    bool bChanged = fullscreen != windows[windowNo]->bFullscreen;
     if( !bChanged ){
         return;
     }
 
-    windows[currentWindow]->bFullscreen = fullscreen;
+    windows[windowNo]->bFullscreen = fullscreen;
  
 
 #ifdef TARGET_LINUX
 #include <X11/Xatom.h>
  
-    Window nativeWin = glfwGetX11Window(windows[currentWindow]->windowPtr);
+    Window nativeWin = glfwGetX11Window(windows[windowNo]->windowPtr);
 	Display* display = glfwGetX11Display();
 	int monitorCount;
 	GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
@@ -873,23 +877,24 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
 	
     int monitorCount;
     GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
-    int currentMonitor = getCurrentMonitor();
+    int windowMonitor = getWindowMonitor(windowNo);
 
-	if( windows[currentWindow]->bFullscreen ){
-        windows[currentWindow]->windowBounds.set(getWindowPosition().x,
-                                                 getWindowPosition().y,
-                                                 getWindowSize(currentWindow).x,
-                                                 getWindowSize(currentWindow).y);
+	if( windows[windowNo]->bFullscreen ){
+        ofPoint winPos = getWindowPosition(windowNo);
+        ofPoint winSize = getWindowSize(windowNo);
+
+        windows[windowNo]->windowBounds.set(winPos.x, winPos.y,
+                                            winSize.x, winSize.y);
  
 		//----------------------------------------------------
-        if( currentMonitor == 0 ){
+        if( windowNo == 0 ){
             SetSystemUIMode(kUIModeAllHidden,NULL);
         }
-		NSWindow * cocoaWindow = glfwGetCocoaWindow(windows[currentWindow]->windowPtr);
+		NSWindow * cocoaWindow = glfwGetCocoaWindow(windows[windowNo]->windowPtr);
  
 		[cocoaWindow setStyleMask:NSBorderlessWindowMask];
  
-		ofVec3f screenSize = getScreenSize();
+		ofVec3f screenSize = getScreenSize(windowNo);
 		ofRectangle allScreensSpace;
  
         if( bMultiWindowFullscreen && monitorCount > 1 ){
@@ -903,45 +908,47 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
 				allScreensSpace = allScreensSpace.getUnion(screen);
 			}
 			//for OS X we need to set this first as the window size affects the window positon
-			setWindowShape(allScreensSpace.width, allScreensSpace.height);
-			setWindowPosition(allScreensSpace.x, allScreensSpace.y);
+			setWindowShape(windowNo, allScreensSpace.width, allScreensSpace.height);
+			setWindowPosition(windowNo, allScreensSpace.x, allScreensSpace.y);
  
-        }else if (monitorCount > 1 && currentMonitor < monitorCount){
+        }else if (monitorCount > 1 && windowMonitor < monitorCount){
             int xpos;
 			int ypos;
-			glfwGetMonitorPos(monitors[currentMonitor], &xpos, &ypos);
+			glfwGetMonitorPos(monitors[windowMonitor], &xpos, &ypos);
  
             //we do this as setWindowShape affects the position of the monitor
             //normally we would just call setWindowShape first, but on multi monitor you see the window bleed onto the second monitor as it first changes shape and is then repositioned.
             //this first moves it over in X, does the screen resize and then by calling it again its set correctly in y.
-			setWindowPosition(xpos, ypos);
-            setWindowShape(screenSize.x, screenSize.y);
-			setWindowPosition(xpos, ypos);
+			setWindowPosition(windowNo, xpos, ypos);
+            setWindowShape(windowNo, screenSize.x, screenSize.y);
+			setWindowPosition(windowNo, xpos, ypos);
 		}else{
             //for OS X we need to set this first as the window size affects the window positon
-            setWindowShape(screenSize.x, screenSize.y);
-			setWindowPosition(0,0);
+            setWindowShape(windowNo, screenSize.x, screenSize.y);
+			setWindowPosition(windowNo, 0,0);
 		}
  
         //make sure the window is getting the mouse/key events
         [cocoaWindow makeFirstResponder:cocoaWindow.contentView];
  
-	}else if( windows[currentWindow]->bFullscreen == false  ){
-        printf("currentMonitor is %i - currentWindow is %i\n", currentMonitor, currentWindow);
-        if( currentMonitor == 0 ){
+	}else if( windows[windowNo]->bFullscreen == false  ){
+        if( windowMonitor == 0 ){
             SetSystemUIMode(kUIModeNormal,NULL);
         }
         
-		NSWindow * cocoaWindow = glfwGetCocoaWindow(windows[currentWindow]->windowPtr);
+		NSWindow * cocoaWindow = glfwGetCocoaWindow(windows[windowNo]->windowPtr);
 		[cocoaWindow setStyleMask:NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask];
  
-		setWindowShape(windows[currentWindow]->windowBounds.getWidth(), windows[currentWindow]->windowBounds.getHeight());
+		setWindowShape(windowNo,
+                       windows[windowNo]->windowBounds.getWidth(),
+                       windows[windowNo]->windowBounds.getHeight());
  
 		//----------------------------------------------------
 		// if we have recorded the screen position, put it there
 		// if not, better to let the system do it (and put it where it wants)
 		if (ofGetFrameNum() > 0){
-			setWindowPosition(windows[currentWindow]->windowBounds.x, windows[currentWindow]->windowBounds.y);
+			setWindowPosition(windows[windowNo]->windowBounds.x,
+                              windows[windowNo]->windowBounds.y);
 		}
  
 		//----------------------------------------------------
@@ -949,21 +956,22 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
         [cocoaWindow makeFirstResponder:cocoaWindow.contentView];
 	}
 #elif defined(TARGET_WIN32)
-    if( windows[currentWindow]->bFullscreen){
-        windows[currentWindow]->windowBounds.set(getWindowPosition().x,
-                                                 getWindowPosition().y,
-                                                 getWindowSize(currentWindow).x,
-                                                 getWindowSize(currentWindow).y);
- 
+    if( windows[windowNo]->bFullscreen){
+        ofPoint winPos = getWindowPosition(windowNo);
+        ofPoint winSize = getWindowSize(windowNo);
+
+        windows[windowNo]->windowBounds.set(winPos.x, winPos.y,
+                                            winSize.x, winSize.y);
+
 		//----------------------------------------------------
-		HWND hwnd = glfwGetWin32Window(windows[currentWindow]->windowPtr);
+		HWND hwnd = glfwGetWin32Window(windows[windowNo]->windowPtr);
  
 		SetWindowLong(hwnd, GWL_EXSTYLE, 0);
   		SetWindowLong(hwnd, GWL_STYLE, WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
   		SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED | SWP_SHOWWINDOW);
  
-        float fullscreenW = getScreenSize().x;
-        float fullscreenH = getScreenSize().y;
+        float fullscreenW = getScreenSize(windowNo).x;
+        float fullscreenH = getScreenSize(windowNo).y;
  
         int xpos = 0;
         int ypos = 0;
@@ -991,16 +999,16 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
  
             int monitorCount;
             GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
-            int currentMonitor = getCurrentMonitor();
-            glfwGetMonitorPos(monitors[currentMonitor], &xpos, &ypos);
+            int windowMonitor = getWindowMonitor(windowNo);
+            glfwGetMonitorPos(monitors[windowMonitor], &xpos, &ypos);
  
         }
  
         SetWindowPos(hwnd, HWND_TOPMOST, xpos, ypos, fullscreenW, fullscreenH, SWP_SHOWWINDOW);
  
-	}else if( windows[currentWindow]->bFullscreen == false ){
+	}else if( windows[windowNo]->bFullscreen == false ){
  
-		HWND hwnd = glfwGetWin32Window(windows[currentWindow]->windowPtr);
+		HWND hwnd = glfwGetWin32Window(windows[windowNo]->windowPtr);
  
   		DWORD EX_STYLE = WS_EX_OVERLAPPEDWINDOW;
 		DWORD STYLE = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
@@ -1012,26 +1020,41 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen){
  
 		//not sure why this is - but if we don't do this the window shrinks by 4 pixels in x and y
 		//should look for a better fix.
-		setWindowPosition(windows[currentWindow]->windowBounds.x-2, windows[currentWindow]->windowBounds.y-2);
-		setWindowShape(windows[currentWindow]->windowBounds.getWidth()+4, windows[currentWindow]->windowBounds.getHeight()+4);
+		setWindowPosition(windows[windowNo]->windowBounds.x-2,
+                          windows[windowNo]->windowBounds.y-2);
+		setWindowShape(windows[windowNo]->windowBounds.getWidth()+4,
+                       windows[windowNo]->windowBounds.getHeight()+4);
 	}
 #endif
 
-    if( fullscreen == false && windows[currentWindow]->windowName.length() ){
-        setWindowTitle(windows[currentWindow]->windowName); 
+    if( fullscreen == false && windows[windowNo]->windowName.length() ){
+        setWindowTitle(windowNo, windows[windowNo]->windowName);
+    }
+}
+
+//------------------------------------------------------------
+void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen) {
+    setFullscreen(currentWindow, fullscreen);
+}
+
+//------------------------------------------------------------
+void ofxAppGLFWWindowMulti::toggleFullscreen(int windowNo){
+    if (!ofInRange(windowNo, 0, windows.size())) {
+        ofLogError("ofxAppGLFWWindowMulti::setFullScreen")
+            << "window doesn't exist with windowNo: " << windowNo;
+        return;
     }
 
-    
+	if(windows[windowNo]->bFullscreen == false){
+		setFullscreen(windowNo, true);
+	} else {
+		setFullscreen(windowNo, false);
+	}
 }
 
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::toggleFullscreen(){
-
-	if(windows[currentWindow]->bFullscreen == false){
-		setFullscreen(true);
-	} else {
-		setFullscreen(false);
-	}
+    toggleFullscreen(currentWindow);
 }
 
 //------------------------------------------------------------
