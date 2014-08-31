@@ -730,10 +730,20 @@ void ofxAppGLFWWindowMulti::setWindowPosition(int x, int y){
 }
 
 //------------------------------------------------------------
-void ofxAppGLFWWindowMulti::setWindowShape(int w, int h){
-	glfwSetWindowSize(windows[currentWindow]->windowPtr,w,h);
+void ofxAppGLFWWindowMulti::setWindowShape(int windowNo, int w, int h){
+    if (!ofInRange(windowNo, 0, windows.size())) {
+        ofLogError("ofxAppGLFWWindowMulti") << "setWindowShape()"
+            << "window doesn't exist with windowNo: " << windowNo;
+        return;
+    }
+
+	glfwSetWindowSize(windows[windowNo]->windowPtr,w,h);
 }
 
+//------------------------------------------------------------
+void ofxAppGLFWWindowMulti::setWindowShape(int w, int h){
+    setWindowShape(currentWindow, w, h);
+}
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::hideCursor(){
 	glfwSetInputMode(windows[currentWindow]->windowPtr,GLFW_CURSOR,GLFW_CURSOR_HIDDEN);
