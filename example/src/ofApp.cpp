@@ -14,7 +14,6 @@ void ofApp::setup(){
     winManager.createWindow();
     winManager.setWindowTitle(1, "second window");
     winManager.setWindowShape(1, 300, 300);
-
 }
 
 //--------------------------------------------------------------
@@ -42,7 +41,7 @@ void ofApp::exit(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     if( key == 'f' ){
-        ofToggleFullscreen();
+        winManager.toggleFullscreen(winManager.getFocusedWindowNo());
     }else if( key == 'n'){
         winManager.createWindow();
     }else if( key == 'c'){
