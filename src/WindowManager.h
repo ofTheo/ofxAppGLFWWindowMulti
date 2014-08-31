@@ -20,6 +20,7 @@ class WindowManager{
     
         void createWindow();
         void setWindowTitle(int windowNo, string title);
+        void setWindowShape(int windowNo, int w, int h);
         void closeWindow(int which);
         void closeActiveWindow();
         
