@@ -43,6 +43,14 @@ void WindowManager::createWindow(){
 }
 
 //--------------------------------------------------------------
+void WindowManager::setWindowTitle(int windowNo, string title){
+    if (windowPtr == NULL) {
+        ofLogError("WindowManager::setWindowTitle") << " windowPtr needs to be set " << endl;
+    }
+    windowPtr->setWindowTitle(windowNo, title);
+}
+
+//--------------------------------------------------------------
 void WindowManager::closeActiveWindow(){
     if( windowPtr == NULL ){
         ofLogError("WindowManager::closeActiveWindow") << " windowPtr needs to be set " << endl;

@@ -19,6 +19,7 @@ class WindowManager{
         void saveWindowSettings();
     
         void createWindow();
+        void setWindowTitle(int windowNo, string title);
         void closeWindow(int which);
         void closeActiveWindow();
         

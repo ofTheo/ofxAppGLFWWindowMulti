@@ -517,9 +517,20 @@ void ofxAppGLFWWindowMulti::display(GLFWwindow* window){
 }
 
 //------------------------------------------------------------
+void ofxAppGLFWWindowMulti::setWindowTitle(int windowNo, string title){
+    if (!ofInRange(windowNo, 0, windows.size())) {
+        ofLogError("ofxAppGLFWWindowMulti") << "setWindowTitle()"
+            << "window doesn't exist with windowNo: " << windowNo;
+        return;
+    }
+
+    windows[windowNo]->windowName = title;
+	glfwSetWindowTitle(windows[windowNo]->windowPtr,title.c_str());
+}
+
+//------------------------------------------------------------
 void ofxAppGLFWWindowMulti::setWindowTitle(string title){
-    windows[currentWindow]->windowName = title;
-	glfwSetWindowTitle(windows[currentWindow]->windowPtr,title.c_str());
+    setWindowTitle(currentWindow, title);
 }
 
 //------------------------------------------------------------

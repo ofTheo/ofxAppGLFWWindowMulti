@@ -125,6 +125,7 @@ public:
     ofVec3f     getWindowPosition(int windowNo);
     ofVec3f     getWindowPosition();
 
+    void setWindowTitle(int windowNo, string title);
 	void setWindowTitle(string title);
     void setWindowPosition(int windowNo, int x, int y);
 	void setWindowPosition(int x, int y);
