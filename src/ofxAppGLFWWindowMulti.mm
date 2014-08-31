@@ -1340,15 +1340,8 @@ void ofxAppGLFWWindowMulti::keyboard_cb(GLFWwindow* windowP_, int keycode, int s
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::resize_cb(GLFWwindow* windowP_,int w, int h) {
     instance->setFocusedWindow(windowP_);
-
     instance->updateWindowSize(instance->getFocusedWindowNo());
-    
-    //only do resize notification for main window
-    //TODO: should this be so? resize useful for other windows
-    if(windowP_ == instance->windows[0]->windowPtr){
-        ofNotifyWindowResized(w, h);
-    }
-    
+    ofNotifyWindowResized(w, h);
 	instance->nFramesSinceWindowResized = 0;
 }
 
