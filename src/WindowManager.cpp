@@ -50,11 +50,28 @@ void WindowManager::setWindowTitle(int windowNo, string title){
     windowPtr->setWindowTitle(windowNo, title);
 }
 
+//--------------------------------------------------------------
 void WindowManager::setWindowShape(int windowNo, int w, int h){
     if (windowPtr == NULL) {
         ofLogError("WindowManager::setWindowShape") << " windowPtr needs to be set " << endl;
     }
     windowPtr->setWindowShape(windowNo, w, h);
+}
+
+//--------------------------------------------------------------
+void WindowManager::setFullscreen(int windowNo, bool fullscreen){
+    if (windowPtr == NULL) {
+        ofLogError("WindowManager::setFullscreen") << " windowPtr needs to be set " << endl;
+    }
+    windowPtr->setFullscreen(windowNo, fullscreen);
+}
+
+//--------------------------------------------------------------
+void WindowManager::toggleFullscreen(int windowNo){
+    if (windowPtr == NULL) {
+        ofLogError("WindowManager::toggleFullscreen") << " windowPtr needs to be set " << endl;
+    }
+    windowPtr->toggleFullscreen(windowNo);
 }
 
 //--------------------------------------------------------------

@@ -21,6 +21,8 @@ class WindowManager{
         void createWindow();
         void setWindowTitle(int windowNo, string title);
         void setWindowShape(int windowNo, int w, int h);
+        void setFullscreen(int windowNo, bool fullscreen);
+        void toggleFullscreen(int windowNo);
         void closeWindow(int which);
         void closeActiveWindow();
         
