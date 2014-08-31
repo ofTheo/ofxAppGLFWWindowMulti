@@ -638,11 +638,7 @@ ofPoint ofxAppGLFWWindowMulti::getScreenSize(int windowNo){
                     return ofVec3f(desktopMode->width, desktopMode->height,0);
                 }
             }
-        }else{
-            return ofPoint(0,0);
         }
-    }else{
-        return ofPoint(0,0);
     }
 
     ofLogError("ofxAppGLFWWindowMulti") << "getScreenSize(): "
