@@ -46,7 +46,7 @@ void ofApp::keyPressed(int key){
     }else if( key == 'n'){
         winManager.createWindow();
     }else if( key == 'c'){
-        winManager.closeActiveWindow();
+        winManager.closeFocusedWindow();
     }
 }
 
