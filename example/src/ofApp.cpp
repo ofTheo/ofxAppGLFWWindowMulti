@@ -14,6 +14,7 @@ void ofApp::setup(){
     winManager.createWindow();
     winManager.setWindowTitle(1, "second window");
     winManager.setWindowShape(1, 300, 300);
+    winManager.setWindowPosition(1, ofGetWidth() * 0.5, ofGetHeight() * 0.5);
 }
 
 //--------------------------------------------------------------
