@@ -167,13 +167,13 @@ int ofxAppGLFWWindowMulti::addWindow(string windowName, float x, float y, float 
             initializeWindow();
         }
         setFocusedWindow(winPtr->windowPtr);
+
         return winPtr->windowNo;
 }
 
 //------------------------------------------------------------
 bool ofxAppGLFWWindowMulti::closeWindow(int windowNo){
-    if(windowNo >= 0 && windowNo < windows.size()){
-    
+    if(ofInRange(windowNo, 0, windows.size())){
         if( windows[windowNo]->windowPtr != NULL ){
             glfwDestroyWindow(windows[windowNo]->windowPtr);
             windows[windowNo]->windowPtr = NULL;
@@ -187,14 +187,15 @@ bool ofxAppGLFWWindowMulti::closeWindow(int windowNo){
             if (windowNo == 0) {
                 OF_EXIT_APP(0);
             }
+
+            return true;
         }
-        
     } else {
-        ofLogError("ofxAppGLFWWindowMulti") << "closeWindow(): "
+        ofLogError("ofxAppGLFWWindowMulti::closeWindow")
             << "window doesn't exist with windowNo: " << windowNo;
     }
 
-	return true;
+	return false;
 }
 
 //------------------------------------------------------------
@@ -528,14 +529,13 @@ void ofxAppGLFWWindowMulti::display(GLFWwindow* window){
 
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::setWindowTitle(int windowNo, string title){
-    if (!ofInRange(windowNo, 0, windows.size())) {
-        ofLogError("ofxAppGLFWWindowMulti") << "setWindowTitle()"
+    if (ofInRange(windowNo, 0, windows.size())) {
+        windows[windowNo]->windowName = title;
+        glfwSetWindowTitle(windows[windowNo]->windowPtr,title.c_str());
+    } else {
+        ofLogError("ofxAppGLFWWindowMulti::setWindowTitle")
             << "window doesn't exist with windowNo: " << windowNo;
-        return;
     }
-
-    windows[windowNo]->windowName = title;
-	glfwSetWindowTitle(windows[windowNo]->windowPtr,title.c_str());
 }
 
 //------------------------------------------------------------
@@ -545,7 +545,7 @@ void ofxAppGLFWWindowMulti::setWindowTitle(string title){
 
 //------------------------------------------------------------
 ofPoint ofxAppGLFWWindowMulti::updateWindowSize(int windowNo) {
-    if(windowNo >= 0 && windowNo < windows.size()){
+    if(ofInRange(windowNo, 0, windows.size())) {
         int windowW, windowH;
         glfwGetWindowSize(windows[windowNo]->windowPtr,&windowW,&windowH);
 
@@ -560,7 +560,7 @@ ofPoint ofxAppGLFWWindowMulti::updateWindowSize(int windowNo) {
         return ofPoint(windowW, windowH);
     }
 
-    ofLogError("ofxAppGLFWWindowMulti") << "updateWindowSize(): "
+    ofLogError("ofxAppGLFWWindowMulti::updateWindowSize")
         << "window doesn't exist with windowNo: " << windowNo;
 
     return ofPoint(0,0);
@@ -578,7 +578,7 @@ ofPoint ofxAppGLFWWindowMulti::getWindowSize(int windowNo){
 
 //------------------------------------------------------------
 ofPoint ofxAppGLFWWindowMulti::getWindowPosition(int windowNo){
-    if(windowNo >= 0 && windowNo < windows.size()){
+    if(ofInRange(windowNo, 0, windows.size())) {
         int x, y;
         glfwGetWindowPos(windows[windowNo]->windowPtr, &x, &y);
 
@@ -593,7 +593,7 @@ ofPoint ofxAppGLFWWindowMulti::getWindowPosition(int windowNo){
         return ofPoint(x,y,0);
     }
 
-    ofLogError("ofxAppGLFWWindowMulti") << "getWindowPosition(): "
+    ofLogError("ofxAppGLFWWindowMulti::getWindowPosition")
         << "window doesn't exist with windowNo: " << windowNo;
 
     return ofPoint(0,0,0);
@@ -606,7 +606,7 @@ ofPoint ofxAppGLFWWindowMulti::getWindowPosition(){
 
 //------------------------------------------------------------
 int ofxAppGLFWWindowMulti::getWindowMonitor(int windowNo){
-    if(windowNo >= 0 && windowNo < windows.size()){
+    if(ofInRange(windowNo, 0, windows.size())) {
         int numberOfMonitors;
         GLFWmonitor** monitors = glfwGetMonitors(&numberOfMonitors);
 
@@ -629,16 +629,15 @@ int ofxAppGLFWWindowMulti::getWindowMonitor(int windowNo){
 
             if (monitorRect.inside(xW, yW)){
                 return iC;
-                break;
             }
         }
-        return 0;
+
     }
 
-    ofLogError("ofxAppGLFWWindowMulti") << "getWindowMonitor(): "
+    ofLogError("ofxAppGLFWWindowMulti::getWindowMonitor")
         << "window doesn't exist with windowNo: " << windowNo;
 
-    return -1;
+    return 0;
 }
 
 //------------------------------------------------------------
@@ -648,7 +647,7 @@ int ofxAppGLFWWindowMulti::getCurrentMonitor(){
 
 //------------------------------------------------------------
 ofPoint ofxAppGLFWWindowMulti::getScreenSize(int windowNo){
-    if(windowNo >= 0 && windowNo < windows.size()){
+    if(ofInRange(windowNo, 0, windows.size())) {
         int count;
         GLFWmonitor** monitors = glfwGetMonitors(&count);
         if(count>0){
@@ -660,10 +659,10 @@ ofPoint ofxAppGLFWWindowMulti::getScreenSize(int windowNo){
                 }
             }
         }
+    } else {
+        ofLogError("ofxAppGLFWWindowMulti::getScreenSize")
+            << "window doesn't exist with windowNo: " << windowNo;
     }
-
-    ofLogError("ofxAppGLFWWindowMulti") << "getScreenSize(): "
-        << "window doesn't exist with windowNo: " << windowNo;
 
     return ofPoint(0,0);
 }
@@ -703,11 +702,11 @@ int ofxAppGLFWWindowMulti::getHeight(){
 
 //------------------------------------------------------------
 int ofxAppGLFWWindowMulti::getWindowMode(int windowNo){
-    if(windowNo >= 0 && windowNo < windows.size()){
+    if(ofInRange(windowNo, 0, windows.size())) {
         return ( windows[windowNo]->bFullscreen ? OF_FULLSCREEN : OF_WINDOW );
     }
 
-    ofLogError("ofxAppGLFWWindowMulti") << "getWindowMode(): "
+    ofLogError("ofxAppGLFWWindowMulti::getWindowMode")
         << "window doesn't exist with windowNo: " << windowNo;
 
     return -1;
@@ -720,18 +719,18 @@ int	ofxAppGLFWWindowMulti::getWindowMode(){
 
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::setWindowPosition(int windowNo, int x, int y){
-    if (!ofInRange(windowNo, 0, windows.size())) {
-        ofLogError("ofxAppGLFWWindowMulti") << "setWindowPosition()"
+    if (ofInRange(windowNo, 0, windows.size())) {
+        glfwSetWindowPos(windows[windowNo]->windowPtr,x,y);
+
+        if( windows[windowNo]->bFullscreen == false ){
+            windows[windowNo]->windowBounds.x = x;
+            windows[windowNo]->windowBounds.y = y;
+        }
+    } else {
+        ofLogError("ofxAppGLFWWindowMulti::setWindowPosition")
             << "window doesn't exist with windowNo: " << windowNo;
-        return;
     }
 
-    glfwSetWindowPos(windows[windowNo]->windowPtr,x,y);
-    
-    if( windows[windowNo]->bFullscreen == false ){
-        windows[windowNo]->windowBounds.x = x;
-        windows[windowNo]->windowBounds.y = y;
-    }
 }
 
 //------------------------------------------------------------
@@ -741,13 +740,12 @@ void ofxAppGLFWWindowMulti::setWindowPosition(int x, int y){
 
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::setWindowShape(int windowNo, int w, int h){
-    if (!ofInRange(windowNo, 0, windows.size())) {
-        ofLogError("ofxAppGLFWWindowMulti") << "setWindowShape()"
+    if (ofInRange(windowNo, 0, windows.size())) {
+        glfwSetWindowSize(windows[windowNo]->windowPtr,w,h);
+    } else {
+        ofLogError("ofxAppGLFWWindowMulti::setWindowShape")
             << "window doesn't exist with windowNo: " << windowNo;
-        return;
     }
-
-	glfwSetWindowSize(windows[windowNo]->windowPtr,w,h);
 }
 
 //------------------------------------------------------------
@@ -777,7 +775,7 @@ void ofxAppGLFWWindowMulti::disableSetupScreen(){
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::setFullscreen(int windowNo, bool fullscreen){
     if (!ofInRange(windowNo, 0, windows.size())) {
-        ofLogError("ofxAppGLFWWindowMulti") << "setFullScreen()"
+        ofLogError("ofxAppGLFWWindowMulti::setFullScreen")
             << "window doesn't exist with windowNo: " << windowNo;
         return;
     }
@@ -1046,17 +1044,16 @@ void ofxAppGLFWWindowMulti::setFullscreen(bool fullscreen) {
 
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::toggleFullscreen(int windowNo){
-    if (!ofInRange(windowNo, 0, windows.size())) {
+    if (ofInRange(windowNo, 0, windows.size())) {
+        if(windows[windowNo]->bFullscreen == false){
+            setFullscreen(windowNo, true);
+        } else {
+            setFullscreen(windowNo, false);
+        }
+    } else {
         ofLogError("ofxAppGLFWWindowMulti::setFullScreen")
             << "window doesn't exist with windowNo: " << windowNo;
-        return;
     }
-
-	if(windows[windowNo]->bFullscreen == false){
-		setFullscreen(windowNo, true);
-	} else {
-		setFullscreen(windowNo, false);
-	}
 }
 
 //------------------------------------------------------------
