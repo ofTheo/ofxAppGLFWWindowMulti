@@ -177,6 +177,16 @@ bool ofxAppGLFWWindowMulti::closeWindow(int windowNo){
         if( windows[windowNo]->windowPtr != NULL ){
             glfwDestroyWindow(windows[windowNo]->windowPtr);
             windows[windowNo]->windowPtr = NULL;
+
+            if (windowNo == focusedWindow) {
+                focusedWindow = 0;
+                // TODO This is ok as long as closing window 0 ends the app,
+                // if it's possible to close window 0, and still have other
+                // windows open, this is problematic
+            }
+            if (windowNo == 0) {
+                OF_EXIT_APP(0);
+            }
         }
         
     } else {
