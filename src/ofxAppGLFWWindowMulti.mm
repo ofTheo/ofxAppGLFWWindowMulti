@@ -941,9 +941,7 @@ void ofxAppGLFWWindowMulti::setFullscreen(int windowNo, bool fullscreen){
         [cocoaWindow makeFirstResponder:cocoaWindow.contentView];
  
 	}else if( windows[windowNo]->bFullscreen == false  ){
-        if( windowMonitor == 0 ){
-            SetSystemUIMode(kUIModeNormal,NULL);
-        }
+        SetSystemUIMode(kUIModeNormal,NULL);
         
 		NSWindow * cocoaWindow = glfwGetCocoaWindow(windows[windowNo]->windowPtr);
 		[cocoaWindow setStyleMask:NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask];
