@@ -179,10 +179,10 @@ bool ofxAppGLFWWindowMulti::closeWindow(int windowNo){
             windows[windowNo]->windowPtr = NULL;
         }
         
+    } else {
+        ofLogError("ofxAppGLFWWindowMulti") << "closeWindow(): "
+            << "window doesn't exist with windowNo: " << windowNo;
     }
-
-    ofLogError("ofxAppGLFWWindowMulti") << "closeWindow(): "
-        << "window doesn't exist with windowNo: " << windowNo;
 
 	return true;
 }
