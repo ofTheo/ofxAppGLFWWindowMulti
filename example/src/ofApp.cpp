@@ -2,36 +2,45 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
-    //NOTE IF THIS DOESN'T COMPILE FOR YOU ON OS X
-    //YOU NEED TO SET THE FILE TYPE OF ofxAppGLFWWindowMulti.cpp to Objective C++ Source
-    //OR RENAME THE FILE ofxAppGLFWWindowMulti.mm
-
     winManager.setup((ofxAppGLFWWindowMulti *)ofGetWindowPtr());
     winManager.loadWindowSettings();
 
     ofSetWindowTitle("main window");
+
     winManager.createWindow();
     winManager.setWindowTitle(1, "second window");
     winManager.setWindowShape(1, 300, 300);
-    winManager.setWindowPosition(1, ofGetWidth() * 0.5, ofGetHeight() * 0.5);
+    winManager.setWindowPosition(1, 0, 0);
+
+    for (int i = 0; i < winManager.getWindowPtr()->getNumActiveWindows(); ++i) {
+        mousePos.push_back(ofPoint(0, 0));
+        windowSizes.push_back(ofPoint(0, 0));
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    int activeWindow = winManager.getActiveWindowNo();
+
 	ofSetColor(255, 255, 255);
-    if( winManager.getActiveWindowNo() == 0){
+    if( activeWindow == 0){
         ofBackground(0, 0, 0);
         ofDrawBitmapString("Window 1\n'f' to toggle fullscreen\nn to open new window", -130 + ofGetWidth()/2, ofGetHeight()/2);
     }else{
         ofBackground(60, 60, 60);
         ofDrawBitmapString("Window " + ofToString(winManager.getActiveWindowNo()), -50 + ofGetWidth()/2, ofGetHeight()/2);
     }
+
+    ofCircle(mousePos[winManager.getActiveWindowNo()], 50);
+
+    ofVec2f size = winManager.getWindowPtr()->getWindowSize(activeWindow);
+    ofDrawBitmapString("size: " + ofToString(size), 30, 30);
+    ofVec2f pos = winManager.getWindowPtr()->getWindowPosition(activeWindow);
+    ofDrawBitmapString("position: " + ofToString(pos), 30, 50);
 }
 
 //--------------------------------------------------------------
@@ -57,7 +66,8 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y){
-
+    mousePos[winManager.getFocusedWindowNo()].x = x;
+    mousePos[winManager.getFocusedWindowNo()].y = y;
 }
 
 //--------------------------------------------------------------
