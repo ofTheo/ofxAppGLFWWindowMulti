@@ -1163,7 +1163,12 @@ void ofxAppGLFWWindowMulti::mouse_cb(GLFWwindow* windowP_, int button, int state
 
 //------------------------------------------------------------
 void ofxAppGLFWWindowMulti::motion_cb(GLFWwindow* windowP_, double x, double y) {
-    instance->setFocusedWindow(windowP_);
+    // TODO in theory this shouldn't be necessary, but when a new window is
+    // created programatically (including via loading settings) callbacks are
+    // fired for multiple windows until window 0 is selected
+    if (!glfwGetWindowAttrib(windowP_, GLFW_FOCUSED)){
+        return;
+    }
 
 	rotateMouseXY(ofGetOrientation(), x, y);
 
