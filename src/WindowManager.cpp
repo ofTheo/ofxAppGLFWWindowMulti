@@ -64,6 +64,15 @@ void WindowManager::setWindowTitle(int windowNo, string title){
 }
 
 //--------------------------------------------------------------
+ofPoint WindowManager::getWindowPosition(int windowNo){
+    if (windowPtr == NULL) {
+        ofLogError("WindowManager::getWindowPosition") << "windowPtr needs to be set";
+        return ofPoint(0, 0);
+    }
+    return windowPtr->getWindowPosition(windowNo);
+}
+
+//--------------------------------------------------------------
 void WindowManager::setWindowPosition(int windowNo, int x, int y){
     if (windowPtr == NULL) {
         ofLogError("WindowManager::setWindowPosition") << "windowPtr needs to be set";
