@@ -15,8 +15,10 @@ class WindowManager{
 
         WindowManager();
         void setup(ofxAppGLFWWindowMulti * ptr);
-        void loadWindowSettings();
-        void saveWindowSettings();
+        ofxAppGLFWWindowMulti * getWindowPtr();
+
+        int getActiveWindowNo();
+        int getFocusedWindowNo();
 
         void createWindow();
 
@@ -34,10 +36,8 @@ class WindowManager{
         void closeWindow(int which);
         void closeFocusedWindow();
 
-        int getActiveWindowNo();
-        int getFocusedWindowNo();
-
-        ofxAppGLFWWindowMulti * getWindowPtr();
+        void loadWindowSettings();
+        void saveWindowSettings();
 
     protected:
         ofxAppGLFWWindowMulti * windowPtr;
