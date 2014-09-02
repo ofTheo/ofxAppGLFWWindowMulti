@@ -12,12 +12,12 @@
 
 class WindowManager{
     public:
-    
-        WindowManager(); 
+
+        WindowManager();
         void setup(ofxAppGLFWWindowMulti * ptr);
         void loadWindowSettings();
         void saveWindowSettings();
-    
+
         void createWindow();
         void setWindowTitle(int windowNo, string title);
         ofPoint getWindowPosition(int windowNo);
@@ -29,14 +29,14 @@ class WindowManager{
         void toggleFullscreen(int windowNo);
         void closeWindow(int which);
         void closeFocusedWindow();
-        
+
         int getActiveWindowNo();
         int getFocusedWindowNo();
 
-        ofxAppGLFWWindowMulti * getWindowPtr(); 
-    
+        ofxAppGLFWWindowMulti * getWindowPtr();
+
     protected:
         ofxAppGLFWWindowMulti * windowPtr;
         ofxXmlSettings windowPosXml;
-        string machineString; 
+        string machineString;
 };

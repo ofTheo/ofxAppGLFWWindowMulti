@@ -34,7 +34,7 @@ class AppGLFWSingleWindow{
             bInitialized = false;
             windowPtr = NULL;
         }
-    
+
         ofRectangle getCurrentBounds(){
             if( bFullscreen ){
                 return fullScreenBounds;
@@ -42,21 +42,21 @@ class AppGLFWSingleWindow{
                 return windowBounds;
             }
         }
-    
+
         bool bFullscreen;
         bool bMainWindow;
         bool bInFocus;
         bool bInitialized;
         bool bClosed;
         int windowNo;
-    
-        string windowName; 
+
+        string windowName;
         GLFWwindow* windowPtr;
-    
+
         ofRectangle windowBounds;
         ofRectangle fullScreenBounds;
-    
-        ofPoint mousePt; 
+
+        ofPoint mousePt;
 };
 
 class ofxAppGLFWWindowMulti : public ofAppBaseWindow {
@@ -86,12 +86,12 @@ public:
     int getCurrentWindowNo();
     int getFocusedWindowNo();
     bool isWindowInFocus(int windowNo);
-    
+
     int addWindow(string windowName = "", float x = 0, float y = 0, float w = 1024, float h = 768, bool bFullscreen = false);
     bool closeWindow(int windowNo);
     int getNumWindows();
     int getNumActiveWindows();
-    
+
     //Note: push/pop window should always be used together.
     //sets active the window specified by windowNo - all OF window commands will now refer to this window.
     bool pushWindow(int windowNo);
@@ -101,7 +101,7 @@ public:
     vector < shared_ptr <AppGLFWSingleWindow> > getWindows();
     //end multi window stuff
 
-    
+
     // this functions are only meant to be called from inside OF don't call them from your code
 	void setOpenGLVersion(int major, int minor);
 	void setupOpenGL(int w, int h, int screenMode);
@@ -210,11 +210,11 @@ private:
 	int 			nFramesSinceWindowResized;
 	bool			bDoubleBuffered;
     bool            bMultiWindowFullscreen;
-    bool            isSetup; 
+    bool            isSetup;
 
     ofPoint         updateWindowSize(int windowNo);
 	int				getCurrentMonitor();
-	
+
 	static ofxAppGLFWWindowMulti	* instance;
 	static ofBaseApp *	ofAppPtr;
 
