@@ -64,15 +64,6 @@ void WindowManager::setWindowTitle(int windowNo, string title){
 }
 
 //--------------------------------------------------------------
-ofPoint WindowManager::getWindowPosition(int windowNo){
-    if (windowPtr == NULL) {
-        ofLogError("WindowManager::getWindowPosition") << "windowPtr needs to be set";
-        return ofPoint(0, 0);
-    }
-    return windowPtr->getWindowPosition(windowNo);
-}
-
-//--------------------------------------------------------------
 void WindowManager::setWindowPosition(int windowNo, int x, int y){
     if (windowPtr == NULL) {
         ofLogError("WindowManager::setWindowPosition") << "windowPtr needs to be set";
@@ -82,13 +73,6 @@ void WindowManager::setWindowPosition(int windowNo, int x, int y){
 }
 
 //--------------------------------------------------------------
-ofPoint WindowManager::getWindowShape(int windowNo){
-    if (windowPtr == NULL) {
-        ofLogError("WindowManager::getWindowShape") << "windowPtr needs to be set";
-        return ofPoint(0, 0);
-    }
-}
-//--------------------------------------------------------------
 void WindowManager::setWindowShape(int windowNo, int w, int h){
     if (windowPtr == NULL) {
         ofLogError("WindowManager::setWindowShape") << "windowPtr needs to be set";
@@ -97,6 +81,22 @@ void WindowManager::setWindowShape(int windowNo, int w, int h){
     windowPtr->setWindowShape(windowNo, w, h);
 }
 
+//--------------------------------------------------------------
+ofPoint WindowManager::getWindowPosition(int windowNo){
+    if (windowPtr == NULL) {
+        ofLogError("WindowManager::getWindowPosition") << "windowPtr needs to be set";
+        return ofPoint(0, 0);
+    }
+    return windowPtr->getWindowPosition(windowNo);
+}
+
+//--------------------------------------------------------------
+ofPoint WindowManager::getWindowShape(int windowNo){
+    if (windowPtr == NULL) {
+        ofLogError("WindowManager::getWindowShape") << "windowPtr needs to be set";
+        return ofPoint(0, 0);
+    }
+}
 //--------------------------------------------------------------
 ofPoint WindowManager::getScreenSize(int windowNo){
     if (windowPtr == NULL) {

@@ -19,14 +19,18 @@ class WindowManager{
         void saveWindowSettings();
 
         void createWindow();
+
         void setWindowTitle(int windowNo, string title);
-        ofPoint getWindowPosition(int windowNo);
         void setWindowPosition(int windowNo, int x, int y);
-        ofPoint getWindowShape(int windowNo);
         void setWindowShape(int windowNo, int w, int h);
+
+        ofPoint getWindowPosition(int windowNo);
+        ofPoint getWindowShape(int windowNo);
         ofPoint getScreenSize(int windowNo);
+
         void setFullscreen(int windowNo, bool fullscreen);
         void toggleFullscreen(int windowNo);
+
         void closeWindow(int which);
         void closeFocusedWindow();
 
