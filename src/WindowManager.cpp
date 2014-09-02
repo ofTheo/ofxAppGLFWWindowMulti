@@ -14,7 +14,7 @@ WindowManager::WindowManager(){
 //--------------------------------------------------------------
 void WindowManager::setup(ofxAppGLFWWindowMulti * ptr){
     if (ptr == NULL) {
-        ofLogError("WindowManager::setup") << " windowPtr needs to be set ";
+        ofLogError("WindowManager::setup") << "windowPtr needs to be set";
     }
     windowPtr = ptr;
     machineString = "default";
@@ -30,17 +30,26 @@ ofxAppGLFWWindowMulti * WindowManager::getWindowPtr(){
 
 //--------------------------------------------------------------
 int WindowManager::getActiveWindowNo(){
+    if( windowPtr == NULL ){
+        ofLogError("WindowManager::getActiveWindowNo") << "windowPtr needs to be set";
+        return -1;
+    }
     return windowPtr->getCurrentWindowNo();
 }
 
 //--------------------------------------------------------------
 int WindowManager::getFocusedWindowNo(){
+    if( windowPtr == NULL ){
+        ofLogError("WindowManager::getFocusedWindowNo") << "windowPtr needs to be set";
+        return -1;
+    }
     return windowPtr->getFocusedWindowNo();
 }
 //--------------------------------------------------------------
 void WindowManager::createWindow(){
     if( windowPtr == NULL ){
-        ofLogError("WindowManager::createWindow") << " windowPtr needs to be set " << endl;
+        ofLogError("WindowManager::createWindow") << "windowPtr needs to be set";
+        return;
     }
     windowPtr->addWindow();
 }
@@ -48,7 +57,8 @@ void WindowManager::createWindow(){
 //--------------------------------------------------------------
 void WindowManager::setWindowTitle(int windowNo, string title){
     if (windowPtr == NULL) {
-        ofLogError("WindowManager::setWindowTitle") << " windowPtr needs to be set " << endl;
+        ofLogError("WindowManager::setWindowTitle") << "windowPtr needs to be set";
+        return;
     }
     windowPtr->setWindowTitle(windowNo, title);
 }
@@ -56,7 +66,8 @@ void WindowManager::setWindowTitle(int windowNo, string title){
 //--------------------------------------------------------------
 void WindowManager::setWindowPosition(int windowNo, int x, int y){
     if (windowPtr == NULL) {
-        ofLogError("WindowManager::setWindowPosition") << " windowPtr needs to be set " << endl;
+        ofLogError("WindowManager::setWindowPosition") << "windowPtr needs to be set";
+        return;
     }
     windowPtr->setWindowPosition(windowNo, x, y);
 }
@@ -64,7 +75,8 @@ void WindowManager::setWindowPosition(int windowNo, int x, int y){
 //--------------------------------------------------------------
 void WindowManager::setWindowShape(int windowNo, int w, int h){
     if (windowPtr == NULL) {
-        ofLogError("WindowManager::setWindowShape") << " windowPtr needs to be set " << endl;
+        ofLogError("WindowManager::setWindowShape") << "windowPtr needs to be set";
+        return;
     }
     windowPtr->setWindowShape(windowNo, w, h);
 }
@@ -72,7 +84,8 @@ void WindowManager::setWindowShape(int windowNo, int w, int h){
 //--------------------------------------------------------------
 void WindowManager::setFullscreen(int windowNo, bool fullscreen){
     if (windowPtr == NULL) {
-        ofLogError("WindowManager::setFullscreen") << " windowPtr needs to be set " << endl;
+        ofLogError("WindowManager::setFullscreen") << "windowPtr needs to be set";
+        return;
     }
     windowPtr->setFullscreen(windowNo, fullscreen);
 }
@@ -80,7 +93,8 @@ void WindowManager::setFullscreen(int windowNo, bool fullscreen){
 //--------------------------------------------------------------
 void WindowManager::toggleFullscreen(int windowNo){
     if (windowPtr == NULL) {
-        ofLogError("WindowManager::toggleFullscreen") << " windowPtr needs to be set " << endl;
+        ofLogError("WindowManager::toggleFullscreen") << "windowPtr needs to be set";
+        return;
     }
     windowPtr->toggleFullscreen(windowNo);
 }
@@ -88,7 +102,8 @@ void WindowManager::toggleFullscreen(int windowNo){
 //--------------------------------------------------------------
 void WindowManager::closeFocusedWindow(){
     if( windowPtr == NULL ){
-        ofLogError("WindowManager::closeFocusedWindow") << " windowPtr needs to be set " << endl;
+        ofLogError("WindowManager::closeFocusedWindow") << "windowPtr needs to be set";
+        return;
     }
     windowPtr->closeWindow(getFocusedWindowNo());
 }
@@ -96,7 +111,8 @@ void WindowManager::closeFocusedWindow(){
 //--------------------------------------------------------------
 void WindowManager::closeWindow(int which){
     if( windowPtr == NULL ){
-        ofLogError("WindowManager::closeWindow") << " windowPtr needs to be set " << endl;
+        ofLogError("WindowManager::closeWindow") << "windowPtr needs to be set";
+        return;
     }
     windowPtr->closeWindow(which);
 }
@@ -104,7 +120,8 @@ void WindowManager::closeWindow(int which){
 //--------------------------------------------------------------
 void WindowManager::loadWindowSettings(){
     if( windowPtr == NULL ){
-        ofLogError("WindowManager::loadWindowSettings") << " windowPtr needs to be set " << endl;
+        ofLogError("WindowManager::loadWindowSettings") << "windowPtr needs to be set";
+        return;
     }
 
     vector < shared_ptr<AppGLFWSingleWindow> > windows = windowPtr->getWindows();
@@ -166,7 +183,8 @@ void WindowManager::loadWindowSettings(){
 //--------------------------------------------------------------
 void WindowManager::saveWindowSettings(){
     if( windowPtr == NULL ){
-        ofLogError("WindowManager::saveWindowSettings") << " windowPtr needs to be set " << endl;
+        ofLogError("WindowManager::saveWindowSettings") << "windowPtr needs to be set";
+        return;
     }
     
     if( ofDirectory::doesDirectoryExist("settings") == false){
