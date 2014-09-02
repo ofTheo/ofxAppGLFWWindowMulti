@@ -655,7 +655,7 @@ ofPoint ofxAppGLFWWindowMulti::getScreenSize(int windowNo){
             const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[winMonitor]);
             if(desktopMode){
                 if( orientation == OF_ORIENTATION_DEFAULT || orientation == OF_ORIENTATION_180 ){
-                    return ofVec3f(desktopMode->width, desktopMode->height,0);
+                    return ofPoint(desktopMode->width, desktopMode->height);
                 }
             }
         }
@@ -901,7 +901,7 @@ void ofxAppGLFWWindowMulti::setFullscreen(int windowNo, bool fullscreen){
  
 		[cocoaWindow setStyleMask:NSBorderlessWindowMask];
  
-		ofVec3f screenSize = getScreenSize(windowNo);
+		ofPoint screenSize = getScreenSize(windowNo);
 		ofRectangle allScreensSpace;
  
         if( bMultiWindowFullscreen && monitorCount > 1 ){

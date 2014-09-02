@@ -118,12 +118,12 @@ public:
     int getWidth();
 
     int         getWindowMonitor(int windowNo);
-    ofVec3f     getWindowSize(int windowNo);
-    ofVec3f     getWindowSize();
-    ofVec3f     getScreenSize(int windowNo);
-    ofVec3f     getScreenSize();
-    ofVec3f     getWindowPosition(int windowNo);
-    ofVec3f     getWindowPosition();
+    ofPoint     getWindowSize(int windowNo);
+    ofPoint     getWindowSize();
+    ofPoint     getScreenSize(int windowNo);
+    ofPoint     getScreenSize();
+    ofPoint     getWindowPosition(int windowNo);
+    ofPoint     getWindowPosition();
 
     void setWindowTitle(int windowNo, string title);
 	void setWindowTitle(string title);
