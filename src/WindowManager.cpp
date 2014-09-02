@@ -98,6 +98,15 @@ void WindowManager::setWindowShape(int windowNo, int w, int h){
 }
 
 //--------------------------------------------------------------
+ofPoint WindowManager::getScreenSize(int windowNo){
+    if (windowPtr == NULL) {
+        ofLogError("WindowManager::getScreenSize") << "windowPtr needs to be set";
+        return ofPoint(0, 0);
+    }
+    return windowPtr->getScreenSize(windowNo);
+}
+
+//--------------------------------------------------------------
 void WindowManager::setFullscreen(int windowNo, bool fullscreen){
     if (windowPtr == NULL) {
         ofLogError("WindowManager::setFullscreen") << "windowPtr needs to be set";

@@ -24,6 +24,7 @@ class WindowManager{
         void setWindowPosition(int windowNo, int x, int y);
         ofPoint getWindowShape(int windowNo);
         void setWindowShape(int windowNo, int w, int h);
+        ofPoint getScreenSize(int windowNo);
         void setFullscreen(int windowNo, bool fullscreen);
         void toggleFullscreen(int windowNo);
         void closeWindow(int which);
