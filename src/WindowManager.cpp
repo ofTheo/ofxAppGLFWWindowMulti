@@ -82,6 +82,13 @@ void WindowManager::setWindowPosition(int windowNo, int x, int y){
 }
 
 //--------------------------------------------------------------
+ofPoint WindowManager::getWindowShape(int windowNo){
+    if (windowPtr == NULL) {
+        ofLogError("WindowManager::getWindowShape") << "windowPtr needs to be set";
+        return ofPoint(0, 0);
+    }
+}
+//--------------------------------------------------------------
 void WindowManager::setWindowShape(int windowNo, int w, int h){
     if (windowPtr == NULL) {
         ofLogError("WindowManager::setWindowShape") << "windowPtr needs to be set";
