@@ -13,6 +13,9 @@ WindowManager::WindowManager(){
 
 //--------------------------------------------------------------
 void WindowManager::setup(ofxAppGLFWWindowMulti * ptr){
+    if (ptr == NULL) {
+        ofLogError("WindowManager::setup") << " windowPtr needs to be set ";
+    }
     windowPtr = ptr;
     machineString = "default";
     if( getenv("USER") != NULL ) {
