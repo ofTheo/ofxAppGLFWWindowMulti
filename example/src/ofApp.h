@@ -21,7 +21,4 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
     
         WindowManager winManager;
-
-        vector<ofPoint>     mousePos;
-        vector<ofPoint>     windowSizes;
 };
