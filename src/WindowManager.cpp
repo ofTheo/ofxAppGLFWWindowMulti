@@ -101,6 +101,7 @@ ofPoint WindowManager::getWindowShape(int windowNo){
         ofLogError("WindowManager::getWindowShape") << UNSET_ERR;
         return ofPoint(0, 0);
     }
+    return windowPtr->getWindowSize(windowNo);
 }
 //--------------------------------------------------------------
 ofPoint WindowManager::getScreenSize(int windowNo){
