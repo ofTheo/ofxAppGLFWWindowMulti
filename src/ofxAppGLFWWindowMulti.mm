@@ -241,7 +241,6 @@ bool ofxAppGLFWWindowMulti::pushWindow(int newWindow){
         if( windows[newWindow]->windowPtr != NULL ){
             windowStack.push_back(currentWindow);
             currentWindow = newWindow;
-            focusedWindow = newWindow;
             return true;
         }
     }
@@ -256,7 +255,6 @@ void ofxAppGLFWWindowMulti::popWindow(){
         if( newWindow >= 0 && newWindow < windows.size() ){
             if( windows[newWindow]->windowPtr != NULL ){
                 currentWindow = newWindow;
-                focusedWindow = newWindow;
             }else{
                 currentWindow = 0;
             }
