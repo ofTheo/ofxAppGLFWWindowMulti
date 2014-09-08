@@ -1169,22 +1169,10 @@ void ofxAppGLFWWindowMulti::motion_cb(GLFWwindow* windowP_, double x, double y) 
 
     instance->windows[instance->focusedWindow]->mousePt.set(x, y);
 
-    if( instance->focusedWindow == 0 ){
-
-        if(!instance->buttonPressed){
-            ofNotifyMouseMoved(x, y);
-        }else{
-            ofNotifyMouseDragged(x, y, instance->buttonInUse);
-        }
-
+    if(!instance->buttonPressed){
+        ofNotifyMouseMoved(x, y);
     }else{
-
-        if(!instance->buttonPressed){
-            ofAppPtr->mouseMoved(x, y);
-        }else{
-            ofAppPtr->mouseDragged(x, y, instance->buttonInUse);
-        }
-
+        ofNotifyMouseDragged(x, y, instance->buttonInUse);
     }
 }
 
