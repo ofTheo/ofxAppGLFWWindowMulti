@@ -709,11 +709,11 @@ int ofxAppGLFWWindowMulti::getWindowMode(int windowNo){
     ofLogError("ofxAppGLFWWindowMulti::getWindowMode")
         << "window doesn't exist with windowNo: " << windowNo;
 
-    return -1;
+    return OF_WINDOW;
 }
 
 //------------------------------------------------------------
-int	ofxAppGLFWWindowMulti::getWindowMode(){
+int ofxAppGLFWWindowMulti::getWindowMode(){
     return getWindowMode(currentWindow);
 }
 

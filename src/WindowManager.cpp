@@ -125,6 +125,16 @@ void WindowManager::toggleFullscreen(int windowNo){
 }
 
 //--------------------------------------------------------------
+int WindowManager::getWindowMode(int windowMode){
+    if (windowPtr == NULL) {
+        ofLogError("WindowManager::getWindowMode") << "windowPtr needs to be set";
+        return OF_WINDOW;
+    }
+
+    return windowPtr->getWindowMode(windowMode);
+}
+
+//--------------------------------------------------------------
 void WindowManager::closeFocusedWindow(){
     if( windowPtr == NULL ){
         ofLogError("WindowManager::closeFocusedWindow") << "windowPtr needs to be set";

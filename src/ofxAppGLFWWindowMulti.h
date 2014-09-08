@@ -135,8 +135,8 @@ public:
 	void			setOrientation(ofOrientation orientation);
 	ofOrientation	getOrientation();
 
-    int         getWindowMode(int windowNo);
-    int         getWindowMode();
+    int             getWindowMode(int windowNo);
+    int             getWindowMode();
 
     void		setFullscreen(int windowNo, bool fullscreen);
 	void		setFullscreen(bool fullscreen);
