@@ -60,6 +60,24 @@ void WindowManager::createWindow(){
 }
 
 //--------------------------------------------------------------
+void WindowManager::pushWindow(int windowNo){
+    if( windowPtr == NULL ){
+        ofLogError("WindowManager::pushWindow") << UNSET_ERR;
+        return;
+    }
+    windowPtr->pushWindow(windowNo);
+}
+
+//--------------------------------------------------------------
+void WindowManager::popWindow(){
+    if( windowPtr == NULL ){
+        ofLogError("WindowManager::popWindow") << UNSET_ERR;
+        return;
+    }
+    windowPtr->popWindow();
+}
+
+//--------------------------------------------------------------
 void WindowManager::setWindowTitle(int windowNo, string title){
     if (windowPtr == NULL) {
         ofLogError("WindowManager::setWindowTitle") << UNSET_ERR;

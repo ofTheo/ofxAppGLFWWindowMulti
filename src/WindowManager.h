@@ -22,6 +22,9 @@ class WindowManager{
 
         void createWindow();
 
+        void pushWindow(int windowNo);
+        void popWindow();
+
         void setWindowTitle(int windowNo, string title);
         void setWindowPosition(int windowNo, int x, int y);
         void setWindowShape(int windowNo, int w, int h);
