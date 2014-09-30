@@ -1137,18 +1137,10 @@ void ofxAppGLFWWindowMulti::mouse_cb(GLFWwindow* windowP_, int button, int state
     ofPoint mousePt = instance->windows[instance->focusedWindow]->mousePt;
 
 	if (state == GLFW_PRESS){
-        if( instance->focusedWindow == 0 ){
-            ofNotifyMousePressed(mousePt.x, mousePt.y, button);
-        }else{
-            ofAppPtr->mousePressed(mousePt.x, mousePt.y, button);
-        }
+        ofNotifyMousePressed(mousePt.x, mousePt.y, button);
 		instance->buttonPressed=true;
 	} else if (state == GLFW_RELEASE) {
-        if( instance->focusedWindow == 0 ){
-            ofNotifyMouseReleased(mousePt.x, mousePt.y, button);
-        }else{
-            ofAppPtr->mouseReleased(mousePt.x, mousePt.y, button);
-        }
+        ofNotifyMouseReleased(mousePt.x, mousePt.y, button);
 		instance->buttonPressed=false;
 	}
 	instance->buttonInUse = button;
