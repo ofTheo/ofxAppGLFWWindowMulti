@@ -1054,8 +1054,11 @@ void ofxAppGLFWWindowMulti::scroll_cb(GLFWwindow* windowP_, double x, double y) 
 void ofxAppGLFWWindowMulti::drop_cb(GLFWwindow* windowP_, int numFiles, const char** dropString) {
     instance->setCurrentWindowToWin(windowP_); 
 
+	double xpos, ypos;
+	glfwGetCursorPos(windowP_, &xpos, &ypos);
+
 	ofDragInfo drag;
-	drag.position.set(ofGetMouseX(), ofGetMouseY());
+	drag.position.set(xpos, ypos);
 	drag.files.resize(numFiles);
 	for(int i=0; i<(int)drag.files.size(); i++){
 		drag.files[i] = Poco::URI(dropString[i]).getPath();
